@@ -6,7 +6,6 @@
     flex-direction: column;
     min-height: 100vh;
 }
-
 /* ================= HEADER Y NAVEGACIÓN ================= */
 .mainHeader {
     display: flex;
@@ -17,19 +16,16 @@
     font-size: 12px;
     padding: 10px 20px;
 }
-
 .marca {
     display: flex;
     align-items: center;
     gap: 10px;
     margin: 0;
 }
-
 .logo {
     height: 50px;
     width: auto;
 }
-
 .mainNav ul {
     list-style: none;
     display: flex;
@@ -37,20 +33,16 @@
     margin: 0;
     padding: 0;
 }
-
 .mainNav ul li a {
     text-decoration: none;
     color: black;
     padding: 10px 15px;
     border-radius: 5px;
     font-weight: bold;
-    transition: color 0.2s;
 }
-
 .mainNav ul li a:hover {
     color: #AF1740;
 }
-
 /* ================= TARJETA DE LOGIN ================= */
 .loginContainer {
     flex: 1;
@@ -59,7 +51,6 @@
     align-items: center;
     padding: 40px 20px;
 }
-
 .loginCard {
     background: white;
     width: 100%;
@@ -68,21 +59,18 @@
     border-radius: 8px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
 }
-
 .loginCard h2 {
     text-align: center;
     margin-top: 0;
     margin-bottom: 25px;
     color: #333;
 }
-
 .loginCard label {
     display: block;
     margin-bottom: 8px;
     font-weight: bold;
     color: #444;
 }
-
 /* Modifica esta regla en tu CSS para que quede así: */
 .loginCard input[type="email"],
 .loginCard .input-password {
@@ -94,7 +82,6 @@
     box-sizing: border-box;
     font-family: 'Tahoma', sans-serif;
 }
-
 /* --- ENLACES INTERNOS --- */
 .opcionesEnlaces {
     display: flex;
@@ -102,21 +89,17 @@
     margin-bottom: 20px;
     font-size: 0.9rem;
 }
-
 .olvidoPassword {
     text-decoration: none;
     color: #555;
     transition: color 0.2s;
 }
-
 .olvidoPassword:hover {
     color: #AF1740;
 }
-
 .crearCuentaLink {
     font-weight: bold;
 }
-
 /* --- BOTÓN ACCIÓN --- */
 .btnIngresar {
     width: 100%;
@@ -130,11 +113,9 @@
     cursor: pointer;
     transition: background-color 0.2s;
 }
-
 .btnIngresar:hover {
     background-color: #AF1740;
 }
-
 /* ================= MENSAJES DE FEEDBACK ================= */
 .errorMessage {
     background-color: #fce8e6;
@@ -145,7 +126,6 @@
     margin-bottom: 15px;
     border-left: 4px solid #c5221f;
 }
-
 .successMessage {
     background-color: #e6f4ea;
     color: #137333;
@@ -156,7 +136,6 @@
     font-weight: bold;
     border-left: 4px solid #137333;
 }
-
 /* ================= FOOTER ================= */
 .mainFooter {
     background-color: #f5f4f4;
@@ -164,12 +143,10 @@
     width: 100%;
     margin-top: auto;
 }
-
 .mainFooter p {
     text-align: center;
     margin: 0;
 }
-
 /* 🔥 BOTÓN DEL OJO ACTUALIZADO: Sin bordes feos de navegador, 100% transparente */
 .btn-toggle-password {
     position: absolute;
@@ -192,7 +169,6 @@
     z-index: 5;
     appearance: none;                    /* Desactiva estilos nativos del sistema operativo */
 }
-
 .btn-toggle-password:hover {
     color: #AF1740;
 }
