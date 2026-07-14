@@ -228,9 +228,9 @@ export default function Inventario() {
                     {p.active ? 'Activo' : 'Inactivo'}
                   </span>
 
-                  {/* CORRECCIÓN: Uso de Link para navegar fluidamente al editor del producto */}
+                  {/* CORRECCIÓN: Ruta de redirección unificada con la barra de navegación (/modifyProduct) */}
                   <Link
-                    to={`/edit-product?barcode=${encodeURIComponent(p.idBarcode || '')}`}
+                    to={`/modifyProduct?barcode=${encodeURIComponent(p.idBarcode || '')}`}
                     className="btnModificarFila"
                   >
                     <i className="fas fa-edit"></i> Modificar
