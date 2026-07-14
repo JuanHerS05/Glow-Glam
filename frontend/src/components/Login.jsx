@@ -42,9 +42,8 @@ export default function Login() {
         const userData = await response.json(); 
         localStorage.setItem('usuarioLogueado', JSON.stringify(userData));
 
-        if (userData.role === 'ADMIN' || userData.tipo === 'ADMIN') {
-          
-          window.location.href = '/adminHome';
+        if (userData.role === 'ADMIN') {  
+          navigate('/adminHome');
         } else {
           window.location.href = '/';
         }
@@ -70,7 +69,6 @@ export default function Login() {
         <nav className="mainNav">
           <ul>
             <li><Link to="/">Inicio</Link></li>
-            <li><Link to="/addProduct">Añadir Producto</Link></li>
           </ul>
         </nav>
       </header>
