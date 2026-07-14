@@ -97,7 +97,6 @@ export default function ModifyProduct() {
               </ul>
             </li>
 
-            <li><a href="#contacto">Contacto</a></li>
             <li><Link to="/"><i className="fas fa-sign-out-alt"></i> Cerrar sesión</Link></li>
           </ul>
         </nav>
