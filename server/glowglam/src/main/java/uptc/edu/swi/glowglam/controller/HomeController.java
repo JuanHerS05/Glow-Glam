@@ -14,7 +14,7 @@ import uptc.edu.swi.glowglam.service.ICategoryService;
 import uptc.edu.swi.glowglam.service.IProductService;
 
 @RestController
-@RequestMapping("/api/") // Todas las rutas empezarán con /api
+@RequestMapping("/api") // Quitamos la barra inclinada al final para estandarizar
 public class HomeController {
 
     private final IProductService productService;
@@ -26,8 +26,8 @@ public class HomeController {
     }
 
     // GET: http://localhost:8080/api/home
-    // Devuelve todos los datos necesarios para pintar la página principal
-    @GetMapping
+    // CORRECCIÓN: Le damos una ruta explícita para evitar que el proxy de Vite devuelva el index.html
+    @GetMapping("/home")
     public ResponseEntity<Map<String, Object>> getHomeData(HttpSession session) {
         Map<String, Object> response = new HashMap<>();
         
@@ -46,8 +46,7 @@ public class HomeController {
         return ResponseEntity.ok(response);
     }
 
-    // GET: http://localhost:8080/api/home/check-admin
-    // Un endpoint rápido para que el Front verifique si el usuario actual es ADMIN antes de dejarlo entrar a las vistas de administración
+    // GET: http://localhost:8080/api/check-admin
     @GetMapping("/check-admin")
     public ResponseEntity<?> checkAdminStatus(HttpSession session) {
         Role usuario = (Role) session.getAttribute("usuarioLogueado");
