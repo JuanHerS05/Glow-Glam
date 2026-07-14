@@ -74,7 +74,6 @@ window.location.href = '/adminHome';
         <nav className="mainNav">
           <ul>
             <li><Link to="/">Inicio</Link></li>
-            <li><Link to="/addProduct">Añadir Producto</Link></li>
           </ul>
         </nav>
       </header>
