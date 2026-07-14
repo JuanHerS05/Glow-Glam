@@ -238,4 +238,71 @@
     font-size: 1rem;
 }
 .btnGuardar:hover { background: #740938; }
-/*
+/* ================= MODAL DE CONFIRMACIÓN ================= */
+.modalConfirmacionContainer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+}
+.modalConfirmacionContenido {
+    background: white;
+    padding: 35px;
+    border-radius: 8px;
+    text-align: center;
+    max-width: 400px;
+    width: 90%;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+}
+.iconoExito {
+    width: 60px;
+    height: 60px;
+    background: #e6f4ea;
+    color: #137333;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    margin: 0 auto 15px auto;
+}
+.btnVolverInicio {
+    display: inline-block;
+    width: 100%;
+    padding: 12px 0;
+    background-color: #333;
+    color: white !important;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    margin-top: 15px;
+    border: none;
+    cursor: pointer;
+    font-size: 0.95rem;
+}
+.btnSeguirModificando {
+    background-color: #6c757d;
+    margin-top: 10px;
+}
+.estadoVacio {
+    text-align: center;
+    padding: 50px;
+    color: #666;
+}
+/* ================= FOOTER ================= */
+.mainFooter {
+    background-color: #f5f4f4;
+    padding: 20px;
+    width: 100%;
+    margin-top: auto;
+}
+.mainFooter p {
+    text-align: center;
+    margin: 0;
+}
