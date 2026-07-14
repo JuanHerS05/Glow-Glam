@@ -44,7 +44,7 @@ export default function Login() {
  alert(userData.role);
         if (userData.role === 'ADMIN' || userData.tipo === 'ADMIN') {
           alert(userData.role);
-          window.location.href = '/adminHome';
+          window.location.href = './adminHome';
         } else {
           window.location.href = '/';
         }
