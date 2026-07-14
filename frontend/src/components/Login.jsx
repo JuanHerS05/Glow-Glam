@@ -44,7 +44,7 @@ export default function Login() {
 
         if (userData.role === 'ADMIN' || userData.tipo === 'ADMIN') {
           
-          window.location.href = '/modifyProduct';
+          window.location.href = '/adminHome';
         } else {
           window.location.href = '/';
         }
