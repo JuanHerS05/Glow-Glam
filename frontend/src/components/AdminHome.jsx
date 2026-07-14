@@ -29,7 +29,7 @@ export default function AdminHome() {
     const verificarYValidarAdmin = async () => {
       try {
         // CORRECCIÓN: Ruta real de tu HomeController de Spring Boot (/api/check-admin)
-        const checkResponse = await fetch('/api/check-admin');
+        const checkResponse = await fetch('/api/checkAdmin');
 
         if (!checkResponse.ok) {
           navigate('/Login');
