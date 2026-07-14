@@ -27,7 +27,6 @@ export default function Login() {
     setHasError(false);
     setErrorMessage('');
 
-
     try {
       const response = await fetch('/api/auth/login', {
         method: 'POST',
@@ -36,14 +35,13 @@ export default function Login() {
         },
         body: JSON.stringify({ email, userpass: password })
       });
-    
 
       if (response.ok) {
         const userData = await response.json(); 
         localStorage.setItem('usuarioLogueado', JSON.stringify(userData));
 
-        if (userData.role === 'ADMIN') {  
-       window.location.href ='/adminHome';
+        if (userData.role === 'ADMIN' || userData.tipo === 'ADMIN') {
+          window.location.href = '/adminHome';
         } else {
           window.location.href = '/';
         }
@@ -69,6 +67,7 @@ export default function Login() {
         <nav className="mainNav">
           <ul>
             <li><Link to="/">Inicio</Link></li>
+            <li><Link to="/addProduct">Añadir Producto</Link></li>
           </ul>
         </nav>
       </header>
