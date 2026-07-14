@@ -27,6 +27,8 @@ export default function Login() {
     setHasError(false);
     setErrorMessage('');
 
+    let hostname = location.hostname;
+    alert(hostname);
     try {
       const response = await fetch('/api/auth/login', {
         method: 'POST',
@@ -35,6 +37,7 @@ export default function Login() {
         },
         body: JSON.stringify({ email, userpass: password })
       });
+    
 
       if (response.ok) {
         const userData = await response.json(); 
