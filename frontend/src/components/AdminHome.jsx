@@ -30,7 +30,7 @@ export default function AdminHome() {
       try {
         // CORRECCIÓN: Ruta real de tu HomeController de Spring Boot (/api/check-admin)
         const checkResponse = await fetch('/api/checkAdmin');
-
+alert(checkResponse.ok);
         if (!checkResponse.ok) {
           navigate('/Login');
           return;
