@@ -25,7 +25,7 @@ export default function AdminHome() {
   useEffect(() => {
     const verificarYValidarAdmin = async () => {
       try {
-        // URL real del backend: @RequestMapping("/api/") + @GetMapping("/check-admin")
+        // CORRECCIÓN: Llamamos al endpoint estandarizado del backend
         const checkResponse = await fetch('/api/check-admin', {
           credentials: 'include'
         });
@@ -39,8 +39,8 @@ export default function AdminHome() {
         // Es admin: habilitamos la vista
         setIsAdmin(true);
 
-        // Traemos los datos de la home desde HomeController (/api/)
-        const dataResponse = await fetch('/api/', {
+        // CORRECCIÓN: Llamamos a /api/home (ya no a /api/ que causaba el conflicto del HTML)
+        const dataResponse = await fetch('/api/home', {
           credentials: 'include'
         });
         if (dataResponse.ok) {
