@@ -211,4 +211,68 @@
 .accionesColumna {
     display: flex;
     align-items: center;
-    gap:
+    gap: 25px;
+    justify-content: flex-end;
+    flex-shrink: 0;
+}
+.precioTexto {
+    font-weight: bold;
+    color: #AF1740;
+    font-size: 1.1rem;
+    min-width: 100px;
+    text-align: right;
+    white-space: nowrap;
+}
+.badgeEstado {
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    font-weight: bold;
+    white-space: nowrap;
+}
+.badgeActivo {
+    background-color: #e6f4ea;
+    color: #137333;
+}
+.badgeInactivo {
+    background-color: #fce8e6;
+    color: #c5221f;
+}
+.btnModificarFila {
+    margin: 0;
+    text-decoration: none;
+    padding: 8px 16px;
+    background: #333;
+    color: white !important;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    white-space: nowrap;
+    transition: background 0.2s;
+}
+.btnModificarFila:hover {
+    background: #555;
+}
+.estadoVacio {
+    text-align: center;
+    padding: 30px;
+    color: #666;
+    background: white;
+    border-radius: 8px;
+    font-weight: 500;
+}
+.errorColor {
+    color: #ff4d4d;
+}
+/* ================= FOOTER ================= */
+.mainFooter {
+    background-color: #f5f4f4;
+    padding: 20px;
+    width: 100%;
+    margin-top: auto;
+}
+.mainFooter p {
+    text-align: center;
+    margin: 0;
+}
