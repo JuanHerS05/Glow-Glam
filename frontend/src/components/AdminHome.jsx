@@ -3,17 +3,19 @@ import { Link, useNavigate } from 'react-router-dom';
 import './css/AdminHomemodule.css';
 import logo from './img/logo.png';
 
+// CORRECCIÓN: Importación correcta de imágenes para que Vite las procese
+import newSeasonImg from './img/newSeason.png';
+import banner2Img from './img/newCollection.png'; // O tu banner2.png correspondiente
+import banner3Img from './img/betterPrices.png';  // O tu banner3.png correspondiente
+
 export default function AdminHome() {
   const navigate = useNavigate();
   const [productos, setProductos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
 
-  const imagenesCarrusel = [
-    './img/newSeason.png',
-    './img/banner2.png',
-    './img/banner3.png'
-  ];
+  // CORRECCIÓN: Usamos las referencias importadas
+  const imagenesCarrusel = [newSeasonImg, banner2Img, banner3Img];
   const [currentImgIndex, setCurrentImgIndex] = useState(0);
 
   const [contacto, setContacto] = useState({
@@ -25,21 +27,17 @@ export default function AdminHome() {
   useEffect(() => {
     const verificarYValidarAdmin = async () => {
       try {
-        // CORRECCIÓN: Llamamos al endpoint estandarizado del backend
         const checkResponse = await fetch('/api/check-admin', {
           credentials: 'include'
         });
 
-        // Si NO es admin (401) o falla, al login y cortamos
         if (!checkResponse.ok) {
           navigate('/Login');
           return;
         }
 
-        // Es admin: habilitamos la vista
         setIsAdmin(true);
 
-        // CORRECCIÓN: Llamamos a /api/home (ya no a /api/ que causaba el conflicto del HTML)
         const dataResponse = await fetch('/api/home', {
           credentials: 'include'
         });
@@ -77,7 +75,7 @@ export default function AdminHome() {
       });
       if (res.ok) {
         localStorage.removeItem('usuarioLogueado');
-        navigate('/');
+        window.location.href = '/'; // Redirección limpia al home
       }
     } catch (error) {
       console.error(error);
