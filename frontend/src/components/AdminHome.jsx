@@ -104,43 +104,33 @@ export default function AdminHome() {
   return (
     <div className="bodyContainer">
       {/* ================= HEADER ================= */}
-      <header className="header">
+      <header className="mainHeader" ref={navRef} style={{ position: 'relative', zIndex: 9999, overflow: 'visible' }}>
         <h1 className="marca">
           <img src={logo} alt="GlowGlam Logo" className="logo" />
         </h1>
-        <nav ref={navRef}>
-          <ul className="menuList">
-            <li className="menuItem">
-              <a href="#acerca" className="menuLink">Nosotros</a>
-            </li>
-            <li className="menuItem dropdown" style={{ position: 'relative' }}>
-              <Link className="menuLink" to="#" onClick={(e) => { e.preventDefault(); toggleMenu('productos'); }}>
+        <nav className="mainNav" style={{ overflow: 'visible' }}>
+          <ul style={{ overflow: 'visible' }}>
+            <li className="dropdown" style={{ position: 'relative', overflow: 'visible' }}>
+              <Link to="#" onClick={(e) => { e.preventDefault(); toggleMenu('productos'); }}>
                 Productos <i className="fas fa-chevron-down"></i>
               </Link>
               <ul className="dropdown-content" style={{ display: openMenu === 'productos' ? 'block' : 'none', position: 'absolute', zIndex: 99999 }}>
-                <li className="dropdownItem"><Link className="dropdownLink" to="/adminHome" onClick={() => setOpenMenu(null)}><i className="fas fa-th-list"></i> Ver Catálogo</Link></li>
-                <li className="dropdownItem"><Link className="dropdownLink" to="/admin/all" onClick={() => setOpenMenu(null)}><i className="fas fa-boxes"></i> Inventario</Link></li>
-                <li className="dropdownItem"><Link className="dropdownLink" to="/addProduct" onClick={() => setOpenMenu(null)}><i className="fas fa-plus-circle"></i> Añadir Producto</Link></li>
-                <li className="dropdownItem"><Link className="dropdownLink" to="/modifyProduct" onClick={() => setOpenMenu(null)}><i className="fas fa-edit"></i> Modificar Producto</Link></li>
+                <li><Link to="/adminHome" onClick={() => setOpenMenu(null)}><i className="fas fa-th-list"></i> Ver Catálogo</Link></li>
+                <li><Link to="/admin/all" onClick={() => setOpenMenu(null)}><i className="fas fa-boxes"></i> Inventario</Link></li>
+                <li><Link to="/addProduct" onClick={() => setOpenMenu(null)}><i className="fas fa-plus-circle"></i> Añadir Producto</Link></li>
+                <li><Link to="/modifyProduct" onClick={() => setOpenMenu(null)}><i className="fas fa-edit"></i> Modificar Producto</Link></li>
               </ul>
             </li>
-            <li className="menuItem dropdown" style={{ position: 'relative' }}>
-              <Link className="menuLink" to="#" onClick={(e) => { e.preventDefault(); toggleMenu('categorias'); }}>
+            <li className="dropdown" style={{ position: 'relative', overflow: 'visible' }}>
+              <Link to="#" onClick={(e) => { e.preventDefault(); toggleMenu('categorias'); }}>
                 Categorías <i className="fas fa-chevron-down"></i>
               </Link>
               <ul className="dropdown-content" style={{ display: openMenu === 'categorias' ? 'block' : 'none', position: 'absolute', zIndex: 99999 }}>
-                <li className="dropdownItem"><Link className="dropdownLink" to="/addCategory" onClick={() => setOpenMenu(null)}><i className="fas fa-folder-plus"></i> Crear Categoría</Link></li>
-                <li className="dropdownItem"><Link className="dropdownLink" to="/modifyCategory" onClick={() => setOpenMenu(null)}><i className="fas fa-folder-minus"></i> Modificar Categoría</Link></li>
+                <li><Link to="/addCategory" onClick={() => setOpenMenu(null)}><i className="fas fa-folder-plus"></i> Crear Categoría</Link></li>
+                <li><Link to="/modifyCategory" onClick={() => setOpenMenu(null)}><i className="fas fa-folder-minus"></i> Modificar Categoría</Link></li>
               </ul>
             </li>
-            <li className="menuItem">
-              <a href="#contacto" className="menuLink">Contacto</a>
-            </li>
-            <li className="menuItem">
-              <a href="#" className="menuLink" onClick={handleLogout}>
-                <i className="fas fa-sign-out-alt"></i> Cerrar sesión
-              </a>
-            </li>
+            <li><Link to="/adminHome"><i className="fas fa-th-list"></i> Volver a Inicio</Link></li>
           </ul>
         </nav>
       </header>
