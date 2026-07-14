@@ -41,10 +41,10 @@ export default function Login() {
       if (response.ok) {
         const userData = await response.json(); 
         localStorage.setItem('usuarioLogueado', JSON.stringify(userData));
- alert(userData.role);
+
         if (userData.role === 'ADMIN' || userData.tipo === 'ADMIN') {
-          alert(userData.role);
-          window.location.href = './adminHome';
+          
+          window.location.href = '/modifyProduct';
         } else {
           window.location.href = '/';
         }
