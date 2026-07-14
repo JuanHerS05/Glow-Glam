@@ -24,15 +24,21 @@ export default function AdminHome() {
   const [contacto, setContacto] = useState({ name: '', email: '', message: '' });
 
   useEffect(() => {
-    const verificarYValidarAdmin = async () => {
-      try {
-        const checkResponse = await fetch('/api/check-admin', { credentials: 'include' });
-        if (!checkResponse.ok) {
-          navigate('/Login');
-          return;
-        }
-        setIsAdmin(true);
+    // Verificamos el rol con los datos guardados al iniciar sesión,
+    // sin depender de la sesión del servidor (que no sobrevive entre Vercel y Railway).
+    const stored = localStorage.getItem('usuarioLogueado');
+    const user = stored ? JSON.parse(stored) : null;
+    const rol = user ? (user.role || user.tipo) : null;
 
+    if (!user || rol !== 'ADMIN') {
+      navigate('/Login');
+      return;
+    }
+    setIsAdmin(true);
+
+    // Ya validado como admin, cargamos los productos de la página
+    const cargarDatos = async () => {
+      try {
         const dataResponse = await fetch('/api/', { credentials: 'include' });
         if (dataResponse.ok) {
           const data = await dataResponse.json();
@@ -40,12 +46,11 @@ export default function AdminHome() {
         }
       } catch (error) {
         console.error(error);
-        navigate('/Login');
       } finally {
         setLoading(false);
       }
     };
-    verificarYValidarAdmin();
+    cargarDatos();
   }, [navigate]);
 
   // Cerrar los menús al hacer clic fuera del nav
