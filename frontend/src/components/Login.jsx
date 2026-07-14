@@ -21,7 +21,6 @@ export default function Login() {
     e.preventDefault();
     setHasError(false);
     setErrorMessage('');
-
     try {
       const response = await fetch('/api/auth/login', {
         method: 'POST',
@@ -29,13 +28,9 @@ export default function Login() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, userpass: password })
       });
-
       if (response.ok) {
         const userData = await response.json();
         localStorage.setItem('usuarioLogueado', JSON.stringify(userData));
-
-        // Recarga completa para que la app vuelva a leer la sesión del servidor.
-        // NO usar navigate() aquí: no recarga y la sesión no se hidrata.
         if (userData.role === 'ADMIN' || userData.tipo === 'ADMIN') {
           window.location.href = '/adminHome';
         } else {
@@ -55,7 +50,6 @@ export default function Login() {
 
   return (
     <div className="bodyWrapper">
-      {/* ================= HEADER & NAV ================= */}
       <header className="mainHeader">
         <h1 className="marca">
           <img src={logo} alt="GlowGlam Logo" className="logo" />
@@ -63,63 +57,34 @@ export default function Login() {
         <nav className="mainNav">
           <ul>
             <li><Link to="/">Inicio</Link></li>
-            <li><Link to="/addProduct">Añadir Producto</Link></li>
           </ul>
         </nav>
       </header>
 
-      {/* ================= CONTENEDOR LOGIN ================= */}
       <main className="loginContainer">
         <div className="loginCard">
           <h2>Iniciar Sesión</h2>
-
-          {hasError && (
-            <p className="errorMessage">
-              {errorMessage || 'Correo o contraseña incorrectos.'}
-            </p>
-          )}
-
-          {isRegistered && (
-            <p className="successMessage">
-              ¡Registro exitoso! Ya puedes iniciar sesión.
-            </p>
-          )}
-
+          {hasError && (<p className="errorMessage">{errorMessage || 'Correo o contraseña incorrectos.'}</p>)}
+          {isRegistered && (<p className="successMessage">¡Registro exitoso! Ya puedes iniciar sesión.</p>)}
           <form onSubmit={handleSubmit}>
             <label htmlFor="email">Correo Electrónico:</label>
-            <input
-              type="email" id="email" name="email" placeholder="ejemplo@correo.com"
-              value={email} onChange={(e) => setEmail(e.target.value)} required
-            />
-
+            <input type="email" id="email" name="email" placeholder="ejemplo@correo.com" value={email} onChange={(e) => setEmail(e.target.value)} required />
             <label htmlFor="password">Contraseña:</label>
             <div className="password-wrapper">
-              <input
-                type={showPassword ? 'text' : 'password'}
-                id="password" name="userpass" className="input-password"
-                placeholder="Ingrese su contraseña"
-                value={password} onChange={(e) => setPassword(e.target.value)} required
-              />
-              <button
-                type="button" className="btn-toggle-password"
-                onClick={() => setShowPassword(!showPassword)}
-                aria-label={showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
-              >
+              <input type={showPassword ? 'text' : 'password'} id="password" name="userpass" className="input-password" placeholder="Ingrese su contraseña" value={password} onChange={(e) => setPassword(e.target.value)} required />
+              <button type="button" className="btn-toggle-password" onClick={() => setShowPassword(!showPassword)} aria-label={showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}>
                 <i className={showPassword ? 'fas fa-eye-slash' : 'fas fa-eye'}></i>
               </button>
             </div>
-
             <div className="opcionesEnlaces">
               <a href="#" className="olvidoPassword">¿Olvidaste tu contraseña?</a>
               <Link to="/Register" className="olvidoPassword crearCuentaLink">Crear cuenta</Link>
             </div>
-
             <button type="submit" className="btnIngresar">Ingresar</button>
           </form>
         </div>
       </main>
 
-      {/* ================= FOOTER ================= */}
       <footer className="mainFooter">
         <p>&copy; 2026 GlowGlam S.A. All rights reserved.</p>
       </footer>
