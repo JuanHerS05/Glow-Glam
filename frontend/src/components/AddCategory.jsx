@@ -88,9 +88,6 @@ export default function AddCategory() {
         </h1>
         <nav>
           <ul className="menuList">
-            <li className="menuItem">
-              <Link to="/adminHome#acerca" className="menuLink">Nosotros</Link>
-            </li>
             
             <li className="menuItem dropdown">
               <Link className="menuLink" to="#" onClick={(e) => e.preventDefault()}>
@@ -138,9 +135,6 @@ export default function AddCategory() {
               </ul>
             </li>
 
-            <li className="menuItem">
-              <Link to="/adminHome#contacto" className="menuLink">Contacto</Link>
-            </li>
             <li className="menuItem">
               <Link to="#" className="menuLink" onClick={handleLogout}>
                 <i className="fas fa-sign-out-alt"></i> Cerrar sesión
