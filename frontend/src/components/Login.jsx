@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import './css/Loginmodule.css';
 import logo from './img/logo.png';
 
 export default function Login() {
-  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -14,12 +13,8 @@ export default function Login() {
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    if (params.get('error') !== null) {
-      setHasError(true);
-    }
-    if (params.get('registered') !== null) {
-      setIsRegistered(true);
-    }
+    if (params.get('error') !== null) setHasError(true);
+    if (params.get('registered') !== null) setIsRegistered(true);
   }, []);
 
   const handleSubmit = async (e) => {
@@ -30,10 +25,8 @@ export default function Login() {
     try {
       const response = await fetch('/api/auth/login', {
         method: 'POST',
-        credentials: 'include', // <-- imprescindible para que se guarde la cookie de sesión
-        headers: {
-          'Content-Type': 'application/json'
-        },
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, userpass: password })
       });
 
@@ -41,17 +34,13 @@ export default function Login() {
         const userData = await response.json();
         localStorage.setItem('usuarioLogueado', JSON.stringify(userData));
 
-        // Validación robusta para verificar si el rol es ADMIN en cualquier formato estructurado por el backend
-        const esAdmin = 
-          userData.role === 'ADMIN' || 
-          userData.tipo === 'ADMIN' || 
-          (userData.role && userData.role.role === 'ADMIN');
-
-        if (esAdmin) {
-window.location.href = '/adminHome';
-} else {
-  window.location.href = '/'; // Fuerza la recarga a la página de inicio para que lea la sesión al instante
-}
+        // Recarga completa para que la app vuelva a leer la sesión del servidor.
+        // NO usar navigate() aquí: no recarga y la sesión no se hidrata.
+        if (userData.role === 'ADMIN' || userData.tipo === 'ADMIN') {
+          window.location.href = '/adminHome';
+        } else {
+          window.location.href = '/';
+        }
       } else {
         setHasError(true);
         const errorText = await response.text();
@@ -74,6 +63,7 @@ window.location.href = '/adminHome';
         <nav className="mainNav">
           <ul>
             <li><Link to="/">Inicio</Link></li>
+            <li><Link to="/addProduct">Añadir Producto</Link></li>
           </ul>
         </nav>
       </header>
@@ -98,30 +88,20 @@ window.location.href = '/adminHome';
           <form onSubmit={handleSubmit}>
             <label htmlFor="email">Correo Electrónico:</label>
             <input
-              type="email"
-              id="email"
-              name="email"
-              placeholder="ejemplo@correo.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
+              type="email" id="email" name="email" placeholder="ejemplo@correo.com"
+              value={email} onChange={(e) => setEmail(e.target.value)} required
             />
 
             <label htmlFor="password">Contraseña:</label>
             <div className="password-wrapper">
               <input
                 type={showPassword ? 'text' : 'password'}
-                id="password"
-                name="userpass"
-                className="input-password"
+                id="password" name="userpass" className="input-password"
                 placeholder="Ingrese su contraseña"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
+                value={password} onChange={(e) => setPassword(e.target.value)} required
               />
               <button
-                type="button"
-                className="btn-toggle-password"
+                type="button" className="btn-toggle-password"
                 onClick={() => setShowPassword(!showPassword)}
                 aria-label={showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
               >
@@ -130,17 +110,11 @@ window.location.href = '/adminHome';
             </div>
 
             <div className="opcionesEnlaces">
-              <a href="#" className="olvidoPassword">
-                ¿Olvidaste tu contraseña?
-              </a>
-              <Link to="/Register" className="olvidoPassword crearCuentaLink">
-                Crear cuenta
-              </Link>
+              <a href="#" className="olvidoPassword">¿Olvidaste tu contraseña?</a>
+              <Link to="/Register" className="olvidoPassword crearCuentaLink">Crear cuenta</Link>
             </div>
 
-            <button type="submit" className="btnIngresar">
-              Ingresar
-            </button>
+            <button type="submit" className="btnIngresar">Ingresar</button>
           </form>
         </div>
       </main>
