@@ -1,0 +1,367 @@
+.bodyWrapper {
+    font-family: 'Tahoma', sans-serif;
+    color: rgb(34, 33, 33);
+    background-color: #f9f9f9;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* ================= HEADER Y NAVEGACIÓN ================= */
+.mainHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-top: 30px solid #740938;
+    background-color: rgb(246, 243, 243);
+    font-size: 12px;
+    padding: 10px 20px;
+}
+
+.marca {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+}
+
+.logo {
+    height: 50px;
+    width: auto;
+}
+
+.mainNav ul {
+    list-style: none;
+    display: flex;
+    gap: 15px;
+    margin: 0;
+    padding: 0;
+}
+
+.mainNav ul li a {
+    text-decoration: none;
+    color: black;
+    padding: 10px 15px;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+.mainNav ul li a:hover {
+    color: #AF1740;
+}
+
+/* --- DROPDOWN CONTROLS --- */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown > a i {
+    margin-left: 5px;
+    font-size: 0.8rem;
+}
+
+.dropdownContent {
+    display: none;
+    position: absolute;
+    background-color: #ffffff;
+    min-width: 180px;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    z-index: 1000;
+    top: 100%;
+    left: 0;
+    padding: 5px 0;
+    border: 1px solid #eee;
+    list-style: none;
+}
+
+.dropdownContent li a {
+    color: #333333 !important;
+    padding: 10px 15px;
+    text-decoration: none;
+    display: block;
+    font-size: 0.9rem;
+}
+
+.dropdownContent li a:hover {
+    background-color: #f5f5f5;
+    color: #AF1740 !important;
+}
+
+.dropdown:hover .dropdownContent {
+    display: block;
+}
+
+/* ================= CONTENEDORES Y INPUTS ================= */
+.contenedorFormulario {
+    width: 90%;
+    max-width: 700px;
+    margin: 40px auto;
+    background: white;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.panelEdicion h3 {
+    margin-top: 0;
+    margin-bottom: 25px;
+    font-size: 1.4rem;
+    color: #333;
+    border-bottom: 2px solid #f4f4f4;
+    padding-bottom: 10px;
+}
+
+.productNameHighlight {
+    color: #AF1740;
+}
+
+.contenedorFormulario label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #444;
+}
+
+.contenedorFormulario input[type="text"],
+.contenedorFormulario input[type="number"],
+.contenedorFormulario input[type="url"],
+.contenedorFormulario textarea,
+.selectCategory {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-family: 'Tahoma', sans-serif;
+    font-size: 0.95rem;
+}
+
+.inputReadOnly {
+    background: #f5f5f5;
+    color: #777;
+    cursor: not-allowed;
+}
+
+/* ================= COMPONENTE MULTI-ESTADO ================= */
+.estadoControl {
+    margin: 20px 0;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    background: #fafafa;
+    padding: 12px 15px;
+    border-radius: 6px;
+    border: 1px dashed #ddd;
+}
+
+.txtActivo { color: #137333; }
+.txtInactivo { color: #c5221f; }
+
+.btnEstado {
+    width: auto;
+    padding: 8px 15px;
+    margin: 0;
+    background: #666;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.btnEstado:hover { background: #444; }
+
+/* ================= DINÁMICOS URL & PREVIEWS ================= */
+.urlInputsContainer {
+    display: flex;
+    flex-direction: column;
+}
+
+.urlInputGroup {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+    align-items: center;
+}
+
+.urlInputGroup input {
+    margin-bottom: 0 !important;
+    flex: 1;
+}
+
+.btnAddUrl {
+    width: 40px;
+    height: 40px;
+    margin: 0;
+    background: #333;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1.2rem;
+}
+
+.btnRemoveUrl {
+    width: 40px;
+    height: 40px;
+    margin: 0;
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1.2rem;
+}
+
+.imagenesHorizontalPreview {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+    margin-bottom: 25px;
+    flex-wrap: wrap;
+}
+
+.previewImageItem {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+/* ================= ACCIONES DE EDICIÓN ================= */
+.accionesEdicion {
+    display: flex;
+    gap: 15px;
+    margin-top: 25px;
+}
+
+.btnCancelar {
+    background: #999;
+    color: white !important;
+    border: none;
+    padding: 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    flex: 1;
+    text-align: center;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.btnCancelar:hover { background: #777; }
+
+.btnGuardar {
+    flex: 2;
+    margin: 0;
+    background: #AF1740;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+.btnGuardar:hover { background: #740938; }
+
+/* ================= MODAL DE CONFIRMACIÓN ================= */
+.modalConfirmacionContainer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+}
+
+.modalConfirmacionContenido {
+    background: white;
+    padding: 35px;
+    border-radius: 8px;
+    text-align: center;
+    max-width: 400px;
+    width: 90%;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+}
+
+.iconoExito {
+    width: 60px;
+    height: 60px;
+    background: #e6f4ea;
+    color: #137333;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    margin: 0 auto 15px auto;
+}
+
+.btnVolverInicio {
+    display: inline-block;
+    width: 100%;
+    padding: 12px 0;
+    background-color: #333;
+    color: white !important;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    margin-top: 15px;
+    border: none;
+    cursor: pointer;
+    font-size: 0.95rem;
+}
+
+.btnSeguirModificando {
+    background-color: #6c757d;
+    margin-top: 10px;
+}
+
+.estadoVacio {
+    text-align: center;
+    padding: 50px;
+    color: #666;
+}
+
+/* ================= FOOTER ================= */
+.mainFooter {
+    background-color: #f5f4f4;
+    padding: 20px;
+    width: 100%;
+    margin-top: auto;
+}
+
+.mainFooter p {
+    text-align: center;
+    margin: 0;
+}
+
+/* 1. El contenedor padre debe tener posición relativa */
+.dropdown {
+  position: relative;
+  display: inline-block; /* O el comportamiento de flujo que ya tenga en tu flexbox */
+}
+
+/* 2. El menú oculto por defecto, con posicionamiento absoluto */
+.dropdown-content, .dropdownContent {
+  display: none;
+  position: absolute;
+  top: 100%; /* Se despliega justo abajo del texto padre */
+  left: 0;
+  z-index: 99999; /* Se superpone a los formularios e inventarios */
+  min-width: 200px; /* Ancho mínimo para que no se corte el texto */
+}
+
+/* 🔥 LA MAGIA DEL HOVER: Cuando el mouse entra a .dropdown, se muestra el hijo */
+.dropdown:hover .dropdown-content,
+.dropdown:hover .dropdownContent {
+  display: block !important;
+}

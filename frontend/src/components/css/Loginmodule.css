@@ -1,0 +1,198 @@
+.bodyWrapper {
+    font-family: 'Tahoma', sans-serif;
+    color: rgb(34, 33, 33);
+    background-color: #f9f9f9;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* ================= HEADER Y NAVEGACIÓN ================= */
+.mainHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-top: 30px solid #740938;
+    background-color: rgb(246, 243, 243);
+    font-size: 12px;
+    padding: 10px 20px;
+}
+
+.marca {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+}
+
+.logo {
+    height: 50px;
+    width: auto;
+}
+
+.mainNav ul {
+    list-style: none;
+    display: flex;
+    gap: 15px;
+    margin: 0;
+    padding: 0;
+}
+
+.mainNav ul li a {
+    text-decoration: none;
+    color: black;
+    padding: 10px 15px;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: color 0.2s;
+}
+
+.mainNav ul li a:hover {
+    color: #AF1740;
+}
+
+/* ================= TARJETA DE LOGIN ================= */
+.loginContainer {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 20px;
+}
+
+.loginCard {
+    background: white;
+    width: 100%;
+    max-width: 400px;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.loginCard h2 {
+    text-align: center;
+    margin-top: 0;
+    margin-bottom: 25px;
+    color: #333;
+}
+
+.loginCard label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #444;
+}
+
+/* Modifica esta regla en tu CSS para que quede así: */
+.loginCard input[type="email"],
+.loginCard .input-password {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-family: 'Tahoma', sans-serif;
+}
+
+/* --- ENLACES INTERNOS --- */
+.opcionesEnlaces {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    font-size: 0.9rem;
+}
+
+.olvidoPassword {
+    text-decoration: none;
+    color: #555;
+    transition: color 0.2s;
+}
+
+.olvidoPassword:hover {
+    color: #AF1740;
+}
+
+.crearCuentaLink {
+    font-weight: bold;
+}
+
+/* --- BOTÓN ACCIÓN --- */
+.btnIngresar {
+    width: 100%;
+    padding: 12px;
+    background-color: #333;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.btnIngresar:hover {
+    background-color: #AF1740;
+}
+
+/* ================= MENSAJES DE FEEDBACK ================= */
+.errorMessage {
+    background-color: #fce8e6;
+    color: #c5221f;
+    padding: 10px 12px;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    margin-bottom: 15px;
+    border-left: 4px solid #c5221f;
+}
+
+.successMessage {
+    background-color: #e6f4ea;
+    color: #137333;
+    padding: 10px 12px;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    margin-bottom: 15px;
+    font-weight: bold;
+    border-left: 4px solid #137333;
+}
+
+/* ================= FOOTER ================= */
+.mainFooter {
+    background-color: #f5f4f4;
+    padding: 20px;
+    width: 100%;
+    margin-top: auto;
+}
+
+.mainFooter p {
+    text-align: center;
+    margin: 0;
+}
+
+/* 🔥 BOTÓN DEL OJO ACTUALIZADO: Sin bordes feos de navegador, 100% transparente */
+.btn-toggle-password {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent !important; /* Fuerza a quitar cualquier fondo gris */
+    border: none !important;             /* Quita el borde feo por defecto */
+    outline: none !important;            /* Evita el recuadro al hacer clic */
+    box-shadow: none !important;         /* Elimina sombras extrañas */
+    cursor: pointer;
+    color: #666;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;                          /* Evita que el padding deforme el tamaño */
+    width: 24px;                         /* Caja controlada */
+    height: 24px;                        /* Caja controlada */
+    z-index: 5;
+    appearance: none;                    /* Desactiva estilos nativos del sistema operativo */
+}
+
+.btn-toggle-password:hover {
+    color: #AF1740;
+}

@@ -1,0 +1,17 @@
+services:
+  base_datos_mysql:
+    image: mysql:8.0
+    container_name: glowglam_mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: Adri26.2005_
+      MYSQL_DATABASE: glowglam
+      MYSQL_USER: glowg
+      MYSQL_PASSWORD: psjjaGg
+    ports:
+      - "13306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+volumes:
+  mysql_data:

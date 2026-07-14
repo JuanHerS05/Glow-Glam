@@ -1,0 +1,153 @@
+/* CONTENEDOR GENERAL */
+.wishlistWrapper {
+    background-color: #fcfaf7;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    padding: 40px 20px;
+}
+
+/* HEADER */
+.wishlistHeader {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.wishlistHeader h2 {
+    font-size: 2rem;
+    color: #222;
+}
+
+.wishlistHeader i {
+    color: #AF1740;
+}
+
+/* GRID */
+.wishlistGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 25px;
+}
+
+/* CARD */
+.wishlistCard {
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    transition: 0.3s;
+}
+
+.wishlistCard:hover {
+    transform: translateY(-5px);
+}
+
+/* BOTÓN X */
+.btnRemoveX {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: rgba(255,255,255,0.9);
+    border: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 5;
+}
+
+.btnRemoveX {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: white;
+    border: 1px solid #eee;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 10;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: #555; /* 👈 ESTO HACE QUE SE VEA SIEMPRE */
+    font-size: 14px;
+
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    transition: all 0.25s ease;
+}
+
+/* ICONO */
+.btnRemoveX i {
+    pointer-events: none;
+}
+
+/* HOVER */
+.btnRemoveX:hover {
+    background: #AF1740;
+    color: #fff;
+    transform: scale(1.1);
+}
+/* IMAGEN */
+.imgContainer {
+    height: 250px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.imgContainer img {
+    max-width: 90%;
+    max-height: 220px;
+    object-fit: contain;
+}
+
+/* INFO */
+.info {
+    padding: 20px;
+    text-align: center;
+}
+
+.brand {
+    font-size: 0.8rem;
+    color: #888;
+    text-transform: uppercase;
+}
+
+.price {
+    color: #AF1740;
+    font-weight: bold;
+}
+
+/* BOTÓN */
+.btnDetails {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 10px 15px;
+    border-radius: 20px;
+    background: #333;
+    color: white;
+    text-decoration: none;
+}
+
+.btnDetails:hover {
+    background: #AF1740;
+}
+
+/* VACÍO */
+.emptyWishlist {
+    text-align: center;
+}
+
+.emptyWishlist i {
+    font-size: 3rem;
+    color: #ddd;
+}
+
+/* ANIMACIÓN */
+.fade-out {
+    opacity: 0;
+    transform: scale(0.9);
+    transition: all 0.3s ease;
+}

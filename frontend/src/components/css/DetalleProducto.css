@@ -1,0 +1,311 @@
+/* --- ESTILOS GENERALES (UNIFICADOS CON LA TIENDA) --- */
+.bodyWrapper {
+    background-color: #fcfaf7;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+/* --- ESTILOS DEL HEADER COMPARTIDO --- */
+.mainHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #ffffff;
+    padding: 15px 40px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.mainHeader .logo {
+    height: 50px;
+    object-fit: contain;
+}
+
+.mainNav ul {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.mainNav ul li a {
+    text-decoration: none;
+    color: #555;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+.mainNav ul li a:hover {
+    color: #AF1740;
+}
+
+/* --- CONTENEDOR PRINCIPAL SPLIT --- */
+.main-wrapper {
+    padding: 40px 20px;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.detalle-container {
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+    display: flex;
+    flex-wrap: wrap;
+    overflow: hidden;
+}
+
+/* Bloque Izquierdo: Galería de Imágenes */
+.bloque-imagen {
+    flex: 1 1 500px;
+    background: #ffffff;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    box-sizing: border-box;
+    border-right: 1px solid #f0ebf4;
+}
+
+/* Contenedor del visor con soporte para flechas */
+.visor-principal {
+    width: 100%;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.bloque-imagen img#imagenPrincipal {
+    max-width: 100%;
+    max-height: 440px;
+    object-fit: contain;
+    border-radius: 4px;
+}
+
+/* Botones de navegación de imagen estilo tienda */
+.btn-nav-img {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.8);
+    border: 1px solid #ddd;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    color: #333;
+    transition: all 0.3s ease;
+    z-index: 5;
+}
+
+.btn-nav-img:hover {
+    background: #AF1740;
+    color: #fff;
+    border-color: #AF1740;
+}
+
+.btn-nav-img.prev { left: 10px; }
+.btn-nav-img.next { right: 10px; }
+
+/* Miniaturas de la galería */
+.galeria-miniaturas {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+.miniatura-item {
+    width: 70px;
+    height: 70px;
+    border-radius: 6px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+    background: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.miniatura-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+/* Bloque Derecho: Información */
+.bloque-info {
+    flex: 1 1 500px;
+    padding: 50px 40px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+}
+
+.marca-tag {
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #888;
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+
+.producto-titulo {
+    font-size: 2rem;
+    margin: 0 0 15px 0;
+    color: #222;
+    line-height: 1.2;
+}
+
+/* Estrellas y Calificaciones */
+.rating-resumen {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1.1rem;
+    margin-bottom: 25px;
+}
+
+.contenedor-estrellas {
+    display: flex;
+    gap: 2px;
+    color: #FFD700;
+}
+
+.rating-valor {
+    font-weight: bold;
+    color: #222;
+    margin-left: 5px;
+}
+
+.rating-contador {
+    color: #777;
+    font-size: 0.9rem;
+}
+
+.producto-precio-detalle {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #AF1740;
+    margin-bottom: 20px;
+}
+
+.producto-descripcion {
+    color: #666;
+    line-height: 1.6;
+    font-size: 0.95rem;
+    margin-bottom: 35px;
+}
+
+/* Botón Añadir a Lista de Deseos Premium */
+.btn-wishlist {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background: #333;
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+    max-width: 350px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    margin-bottom: 40px;
+    text-decoration: none;
+    font-family: inherit;
+}
+
+.btn-wishlist:hover {
+    background: #AF1740;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(175, 23, 64, 0.3);
+}
+
+/* Caja de Calificación */
+.seccion-calificar {
+    border-top: 1px solid #eee;
+    padding-top: 30px;
+}
+
+.seccion-calificar h4 {
+    margin: 0 0 15px 0;
+    font-size: 1.1rem;
+    color: #222;
+}
+
+.alert-box {
+    padding: 12px 15px;
+    border-radius: 6px;
+    margin-bottom: 15px;
+    font-size: 0.9rem;
+}
+
+.alert-success { background: #efe; color: #2a752a; border: 1px solid #d4edda; }
+.alert-error { background: #fee; color: #b93a3a; border: 1px solid #f8d7da; }
+
+.select-score, .txt-comment {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    box-sizing: border-box;
+    font-size: 0.95rem;
+    outline: none;
+    margin-bottom: 15px;
+    transition: border-color 0.3s;
+}
+
+.select-score:focus, .txt-comment:focus {
+    border-color: #AF1740;
+}
+
+.txt-comment { resize: none; font-family: inherit; }
+
+.btn-submit-rating {
+    background: transparent;
+    color: #AF1740;
+    border: 2px solid #AF1740;
+    padding: 10px 20px;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    align-self: flex-start;
+}
+
+.btn-submit-rating:hover {
+    background: #AF1740;
+    color: white;
+}
+
+footer {
+    text-align: center;
+    padding: 20px;
+    background: #ffffff;
+    border-top: 1px solid #eee;
+    margin-top: 60px;
+    color: #666;
+    font-size: 0.9rem;
+}

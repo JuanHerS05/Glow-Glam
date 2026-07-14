@@ -1,0 +1,609 @@
+/* ==========================================================================
+   1. RESET, BASE & GLOBAL STYLES
+   ========================================================================== */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+.bodyWrapper {
+    font-family: 'Tahoma', sans-serif;
+    color: rgb(34, 33, 33);
+    background-color: #f9f9f9; /* Fondo gris sutil para resaltar tarjetas blancas */
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* ==========================================================================
+   2. HEADER & NAV
+   ========================================================================== */
+.mainHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-top: 30px solid #740938;
+    background-color: rgb(246, 243, 243);
+    font-size: 14px;
+    padding: 15px 40px;
+}
+
+.marca {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+}
+
+.logo {
+    height: 45px;
+    width: auto;
+    display: block;
+}
+
+.mainNav {
+    display: flex;
+    align-items: center;
+}
+
+.mainNav ul {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.mainNav ul li a {
+    text-decoration: none;
+    color: #333;
+    padding: 8px 12px;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: color 0.2s ease;
+}
+
+.mainNav ul li a:hover, .activeLink {
+    color: #AF1740 !important;
+}
+
+.userGreeting {
+    font-weight: bold;
+    color: #333;
+    display: flex;
+    align-items: center;
+}
+
+.userGreeting i {
+    margin-right: 5px;
+    color: #AF1740;
+}
+
+.logoutBtn {
+    color: #AF1740 !important;
+    font-weight: bold;
+}
+
+/* --- BUSCADOR --- */
+.contenedorBuscadorHeader {
+    position: relative;
+    display: flex;
+    align-items: center;
+    margin: 0 10px;
+    min-width: 260px;
+}
+
+.contenedorBuscadorHeader input {
+    width: 100%;
+    padding: 8px 35px 8px 15px;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+.contenedorBuscadorHeader input:focus {
+    border-color: #AF1740;
+    box-shadow: 0 2px 8px rgba(175, 23, 64, 0.15);
+}
+
+.contenedorBuscadorHeader i {
+    position: absolute;
+    right: 15px;
+    color: #888;
+    font-size: 0.95rem;
+}
+
+/* ==========================================================================
+   3. BANNER ROTATIVO (CAROUSEL)
+   ========================================================================== */
+.carouselSection {
+    width: 100%;
+    height: 400px;
+    position: relative;
+    overflow: hidden;
+    padding: 0;
+    background-color: #000;
+}
+
+.imagenContainer {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    opacity: 0;
+    transition: opacity 0.8s ease-in-out;
+    z-index: 1;
+}
+
+.activeSlide {
+    opacity: 1;
+    z-index: 2;
+}
+
+.btnMove {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.8);
+    border: none;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    color: #333;
+    transition: all 0.3s ease;
+    z-index: 10;
+}
+
+.btnMove:hover {
+    background: #AF1740;
+    color: #fff;
+}
+
+.btnPrev { left: 20px; }
+.btnNext { right: 20px; }
+
+/* ==========================================================================
+   4. CATEGORÍAS BUBBLES
+   ========================================================================== */
+.seccionCategorias {
+    background-color: #ffffff;
+    padding: 40px 20px;
+    text-align: center;
+}
+
+.categoriasScroll {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px 30px;
+    flex-wrap: wrap;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.categoriaBurbuja {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    color: #222;
+    width: 110px;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.categoriaBurbuja:hover {
+    transform: translateY(-5px);
+}
+
+.burbujaImgContainer {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background-color: #fdfaf7;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.categoriaBurbuja:hover .burbujaImgContainer,
+.selectedCategory .burbujaImgContainer {
+    border-color: #AF1740;
+    box-shadow: 0 4px 15px rgba(175, 23, 64, 0.2);
+}
+
+.burbujaImgContainer img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.categoriaBurbuja span {
+    font-size: 0.8rem;
+    font-weight: bold;
+    text-align: center;
+    letter-spacing: 0.5px;
+}
+
+/* ==========================================================================
+   5. CATALOGO Y PRODUCTOS (CORREGIDO)
+   ========================================================================== */
+.contenedorProductosGrid {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 0 20px;
+    width: 100%; 
+}
+
+.cabeceraSeccion {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.cabeceraSeccion h2 {
+    font-size: 2rem;
+    color: #222;
+    font-weight: bold;
+    margin: 0 0 8px 0;
+}
+
+.cabeceraSeccion p {
+    color: #777;
+    font-size: 1rem;
+    margin: 0;
+}
+
+.sinResultados {
+    text-align: center;
+    padding: 30px;
+    color: #666;
+    font-style: italic;
+    width: 100%;
+}
+
+.sinResultados i {
+    font-size: 2rem;
+    color: #AF1740;
+    margin-bottom: 10px;
+    display: block;
+}
+
+/* Alineación limpia y consistente hacia la izquierda */
+.productosGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); 
+    gap: 30px;
+    width: 100%;
+    justify-content: start; 
+    align-items: stretch;
+}
+
+/* Evita deformaciones; el ancho dinámico lo da el Grid */
+.productoCard {
+    background: #fff;
+    border: 1px solid #e8e8e8;
+    border-radius: 8px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+    transition: transform 0.2s, box-shadow 0.2s;
+    width: 100%; 
+}
+
+.productoCard:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+}
+
+.productoImgContainer {
+    width: 100%;
+    height: 240px; 
+    background: #fdfdfd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.productoImgContainer img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.productoInfo {
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    text-align: left; 
+}
+
+.productoMarca {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    color: #999;
+    letter-spacing: 1px;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.productoInfo h3 {
+    font-size: 0.95rem;
+    margin: 0 0 10px 0;
+    color: #333;
+    line-height: 1.4;
+    font-weight: bold;
+    min-height: 40px; 
+}
+
+.productoPrecio {
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: #222;
+    margin: auto 0 15px 0; 
+}
+
+.botonComprar {
+    display: block;
+    text-align: center;
+    background: #222;
+    color: #fff !important;
+    text-decoration: none;
+    padding: 11px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: bold;
+    transition: background 0.2s ease;
+}
+
+.botonComprar:hover {
+    background: #AF1740;
+}
+
+/* ==========================================================================
+   6. SECCIÓN ACERCA DE
+   ========================================================================== */
+.seccionAcerca {
+    background-color: #ffffff;
+    padding: 60px 20px;
+    text-align: center;
+}
+
+.contenedorAcerca {
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.contenedorAcerca h2 {
+    font-size: 2rem;
+    color: #AF1740;
+    margin-bottom: 15px;
+}
+
+/* ==========================================================================
+   7. SECCIÓN FORMULARIO BASE
+   ========================================================================== */
+.contenedorFormularioBase {
+    max-width: 600px;
+    width: 90%;
+    margin: 40px auto 60px auto;
+    background: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    border: 1px solid #eee;
+}
+
+.cabeceraContacto {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.contenedorFormularioBase label {
+    display: block;
+    font-weight: bold;
+    margin-top: 15px;
+    margin-bottom: 5px;
+}
+
+.contenedorFormularioBase input,
+.contenedorFormularioBase textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-family: inherit;
+}
+
+.contenedorFormularioBase button {
+    width: 100%;
+    padding: 12px;
+    background-color: #333;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 25px;
+    transition: background 0.2s;
+}
+
+.contenedorFormularioBase button:hover {
+    background-color: #AF1740;
+}
+
+/* ==========================================================================
+   8. FOOTER
+   ========================================================================== */
+.mainFooter {
+    background-color: #f5f4f4;
+    padding: 20px;
+    text-align: center;
+    margin-top: auto;
+}
+
+.mainFooter p {
+    margin: 0;
+}
+
+.btnArriba {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #333;
+    color: white;
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1.2rem;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+}
+
+.btnArriba:hover {
+    background: #AF1740;
+}
+
+/* ==========================================================================
+   DROPDOWN DESPLEGABLE DEL BUSCADOR (HEADER)
+   ========================================================================== */
+
+/* Contenedor del desplegable flotante */
+.buscadorDropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    width: 460px; /* Un ancho más cómodo para que todo quepa en una fila */
+    max-height: 380px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+    overflow-y: auto;
+    margin-top: 8px;
+    padding: 6px 0;
+}
+
+/* Cada fila de producto: alineación completamente horizontal */
+.buscadorDropdownItem {
+    display: flex;
+    align-items: center; /* Centra verticalmente imagen, texto y botón */
+    gap: 15px; /* Espaciado entre columnas */
+    padding: 12px 16px;
+    border-bottom: 1px solid #f5f5f5;
+    transition: background-color 0.2s ease;
+}
+
+.buscadorDropdownItem:last-child {
+    border-bottom: none;
+}
+
+.buscadorDropdownItem:hover {
+    background-color: #fcfaf7; /* Sutil color crema al pasar el cursor */
+}
+
+/* Imagen en miniatura fija */
+.dropdownItemImg {
+    width: 55px;
+    height: 55px;
+    object-fit: cover;
+    border-radius: 6px;
+    background-color: #f9f9f9;
+    flex-shrink: 0; /* Evita que la imagen se deforme */
+}
+
+/* Bloque central de información (Toma todo el espacio restante) */
+.dropdownItemInfo {
+    flex-grow: 1; 
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0; /* Truco crucial para que el text-overflow funcione correctamente */
+}
+
+.dropdownItemBrand {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    color: #888;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+}
+
+.dropdownItemName {
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: #333;
+    margin: 0;
+    /* Si el nombre es larguísimo, añade puntos suspensivos sin romper la fila */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis; 
+}
+
+.dropdownItemPrice {
+    font-size: 0.85rem;
+    font-weight: bold;
+    color: #AF1740;
+}
+
+/* Botón "Ver detalle" perfectamente alineado a la derecha */
+.dropdownDetailBtn {
+    flex-shrink: 0; /* Evita que el botón se comprima */
+    background-color: #AF1740;
+    color: #ffffff !important;
+    text-decoration: none;
+    padding: 8px 14px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    white-space: nowrap;
+}
+
+.dropdownDetailBtn:hover {
+    background-color: #740938;
+    transform: translateY(-1px);
+}
+
+/* Mensaje de fallback limpio */
+.dropdownNoResults {
+    padding: 20px;
+    text-align: center;
+    color: #666;
+    font-size: 0.9rem;
+    font-style: italic;
+}
