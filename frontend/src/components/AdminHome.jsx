@@ -69,9 +69,9 @@ export default function AdminHome() {
     try {
       const res = await fetch('/api/auth/logout', { method: 'POST', credentials: 'include' });
       if (res.ok) {
-        localStorage.removeItem('usuarioLogueado');
-        navigate('/');
-      }
+  localStorage.removeItem('usuarioLogueado');
+  window.location.href = '/';   // en vez de navigate('/')
+}
     } catch (error) {
       console.error(error);
     }
