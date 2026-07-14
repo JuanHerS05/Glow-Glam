@@ -6,7 +6,6 @@
     flex-direction: column;
     min-height: 100vh;
 }
-
 /* ================= HEADER Y NAVEGACIÓN ================= */
 .mainHeader {
     display: flex;
@@ -44,7 +43,6 @@
 .mainNav ul li a:hover {
     color: #AF1740;
 }
-
 /* ================= DROPDOWN (controlado por click desde React) ================= */
 .dropdown {
     position: relative;
@@ -84,7 +82,6 @@
     background-color: #f5f5f5;
     color: #AF1740 !important;
 }
-
 /* ================= CONTENEDOR DE FILTROS ================= */
 .contenedorFormulario {
     width: 90%;
@@ -126,7 +123,6 @@
     background-color: #fff;
     font-family: inherit;
 }
-
 /* ================= FILAS DE PRODUCTOS (con fix anti-desborde) ================= */
 .listaProductosHorizontal {
     border-top: 1px solid #eee;
@@ -199,7 +195,6 @@
     font-family: monospace;
     color: #333;
 }
-
 /* --- BLOQUE DE ACCIONES DE LA FILA --- */
 .accionBloque {
     display: flex;
@@ -248,7 +243,6 @@
 .btnModificarFila:hover {
     background-color: #AF1740;
 }
-
 /* ================= MODAL INTERACTIVO DE ÉXITO ================= */
 .modalConfirmacionContainer {
     position: fixed;
@@ -309,7 +303,6 @@
 .btnCerrarModal:hover {
     color: #333;
 }
-
 /* ================= FOOTER ================= */
 .mainFooter {
     background-color: #f5f4f4;
