@@ -51,12 +51,13 @@ public class HomeController {
     @GetMapping("/check-admin")
     public ResponseEntity<?> checkAdminStatus(HttpSession session) {
         Role usuario = (Role) session.getAttribute("usuarioLogueado");
-        
+       return ResponseEntity.status(HttpStatus.AUTHORIZED).body(usuario.getEmail());
+    /*    
         if (usuario == null || usuario.getRole() != RoleEnum.ADMIN) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Acceso no autorizado.");
         }
         
         // Si es admin, responde un 200 OK indicando que puede proceder
         return ResponseEntity.ok().build();
-    }
+    } */
 }
