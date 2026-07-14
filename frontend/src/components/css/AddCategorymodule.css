@@ -205,4 +205,48 @@
     animation: fademodal 0.3s ease-out;
 }
 @keyframes fademodal {
-    from {
+    from { transform: scale(0.8); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+.iconoExito {
+    font-size: 3.5rem;
+    color: #28a745;
+    margin-bottom: 15px;
+    background-color: transparent;
+    line-height: normal;
+    border-radius: 0;
+}
+.btnVolverInicio {
+    display: inline-block;
+    background-color: #AF1740;
+    color: white !important;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 4px;
+    margin-top: 15px;
+    font-weight: bold;
+    transition: background 0.2s;
+}
+.btnVolverInicio:hover {
+    background-color: #8c1233;
+}
+.btnCerrarModalCat {
+    margin-top: 14px;
+    background: none;
+    border: none;
+    color: #888;
+    cursor: pointer;
+    text-decoration: underline;
+    font-size: 0.9rem;
+}
+/* ================= FOOTER ================= */
+.mainFooter {
+    background-color: #f5f4f4;
+    padding: 20px;
+    width: 100%;
+    margin-top: auto;
+}
+.mainFooter p {
+    text-align: center;
+    margin: 0;
+}
