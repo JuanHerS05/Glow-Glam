@@ -3,7 +3,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import "./css/Wishlistmodule.css";
 import logo from './img/logo.png';
 
-// CORRECCIÓN: Agregamos la prop session para que herede el estado del usuario activo
 export const Wishlist = ({ session }) => {
   const [wishlistItems, setWishlistItems] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -98,20 +97,20 @@ export const Wishlist = ({ session }) => {
           <ul>
             <li><Link to="/">Productos</Link></li>
 
-            {session?.usuarioLogueado ? (
+            {/* SE QUITA EL INICIAR SESIÓN: Ahora solo renderiza el saludo y "Salir" si hay sesión activa */}
+            {session?.usuarioLogueado && (
               <>
                 <li className="userGreeting" style={{ display: 'flex', alignItems: 'center', fontWeight: 'bold', color: '#333', marginRight: '10px' }}>
                   <i className="fas fa-smile" style={{ marginRight: '5px', color: '#AF1740' }}></i>
                   ¡Hola, <span>{session.usuarioLogueado.name}</span>!
                 </li>
                 <li>
-                  {/* CORRECCIÓN: Cierre de sesión idéntico al componente de Detalles */}
                   <Link to="#" onClick={handleLogout} style={{ color: '#AF1740', fontWeight: 'bold' }}>
                     <i className="fas fa-sign-out-alt"></i> Salir
                   </Link>
                 </li>
               </>
-            ) }
+            )}
           </ul>
         </nav>
       </header>
@@ -168,7 +167,6 @@ export const Wishlist = ({ session }) => {
                       ${Number(product.price).toLocaleString('es-CO', { minimumFractionDigits: 0 })} COP
                     </p>
 
-                    {/* CORRECCIÓN: Redirección SPA exacta al path "/producto/detalle" usando queries */}
                     <Link
                       to={`/producto/detalle?barcode=${product.idBarcode}`}
                       className="btnDetails"
