@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './css/AdminHomemodule.css';
 import logo from './img/logo.png';
-// CORRECCIÓN: importamos las imágenes para que Vite las procese (rutas string no funcionan en build)
 import newSeasonImg from './img/newSeason.png';
 import newCollectionImg from './img/newCollection.png';
 import betterPricesImg from './img/betterPrices.png';
@@ -13,19 +12,15 @@ export default function AdminHome() {
   const [loading, setLoading] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
 
-  // Carrusel con imágenes importadas
   const imagenesCarrusel = [newSeasonImg, newCollectionImg, betterPricesImg];
   const [currentImgIndex, setCurrentImgIndex] = useState(0);
 
-  // Estado de los menús desplegables (click, no hover)
-  const [openMenu, setOpenMenu] = useState(null); // 'productos' | 'categorias' | null
+  const [openMenu, setOpenMenu] = useState(null);
   const navRef = useRef(null);
 
   const [contacto, setContacto] = useState({ name: '', email: '', message: '' });
 
   useEffect(() => {
-    // Verificamos el rol con los datos guardados al iniciar sesión,
-    // sin depender de la sesión del servidor (que no sobrevive entre Vercel y Railway).
     const stored = localStorage.getItem('usuarioLogueado');
     const user = stored ? JSON.parse(stored) : null;
     const rol = user ? (user.role || user.tipo) : null;
@@ -36,9 +31,9 @@ export default function AdminHome() {
     }
     setIsAdmin(true);
 
-    // Ya validado como admin, cargamos los productos de la página
     const cargarDatos = async () => {
       try {
+        // Usamos /api/products (el mismo que el cliente) para que sí cargue el catálogo
         const dataResponse = await fetch('/api/products', { credentials: 'include' });
         if (dataResponse.ok) {
           const data = await dataResponse.json();
@@ -56,7 +51,6 @@ export default function AdminHome() {
     cargarDatos();
   }, [navigate]);
 
-  // Cerrar los menús al hacer clic fuera del nav
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (navRef.current && !navRef.current.contains(e.target)) setOpenMenu(null);
@@ -75,14 +69,10 @@ export default function AdminHome() {
   const handleLogout = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch('/api/auth/logout', { method: 'POST', credentials: 'include' });
-      if (res.ok) {
-  localStorage.removeItem('usuarioLogueado');
-  window.location.href = '/';   // en vez de navigate('/')
-}
-    } catch (error) {
-      console.error(error);
-    }
+      await fetch('/api/auth/logout', { method: 'POST', credentials: 'include' });
+    } catch (_) {}
+    localStorage.removeItem('usuarioLogueado');
+    window.location.href = '/';
   };
 
   const handleContactSubmit = async (e) => {
@@ -123,77 +113,26 @@ export default function AdminHome() {
             <li className="menuItem">
               <a href="#acerca" className="menuLink">Nosotros</a>
             </li>
-
-            {/* ===== Productos (click) ===== */}
             <li className="menuItem dropdown" style={{ position: 'relative' }}>
-              <Link
-                className="menuLink"
-                to="#"
-                onClick={(e) => { e.preventDefault(); toggleMenu('productos'); }}
-              >
+              <Link className="menuLink" to="#" onClick={(e) => { e.preventDefault(); toggleMenu('productos'); }}>
                 Productos <i className="fas fa-chevron-down"></i>
               </Link>
-              <ul
-                className="dropdown-content"
-                style={{
-                  display: openMenu === 'productos' ? 'block' : 'none',
-                  position: 'absolute',
-                  zIndex: 99999
-                }}
-              >
-                <li className="dropdownItem">
-                  <Link className="dropdownLink" to="/adminHome" onClick={() => setOpenMenu(null)}>
-                    <i className="fas fa-th-list"></i> Ver Catálogo
-                  </Link>
-                </li>
-                <li className="dropdownItem">
-                  <Link className="dropdownLink" to="/admin/all" onClick={() => setOpenMenu(null)}>
-                    <i className="fas fa-boxes"></i> Inventario
-                  </Link>
-                </li>
-                <li className="dropdownItem">
-                  <Link className="dropdownLink" to="/addProduct" onClick={() => setOpenMenu(null)}>
-                    <i className="fas fa-plus-circle"></i> Añadir Producto
-                  </Link>
-                </li>
-                <li className="dropdownItem">
-                  <Link className="dropdownLink" to="/modifyProduct" onClick={() => setOpenMenu(null)}>
-                    <i className="fas fa-edit"></i> Modificar Producto
-                  </Link>
-                </li>
+              <ul className="dropdown-content" style={{ display: openMenu === 'productos' ? 'block' : 'none', position: 'absolute', zIndex: 99999 }}>
+                <li className="dropdownItem"><Link className="dropdownLink" to="/adminHome" onClick={() => setOpenMenu(null)}><i className="fas fa-th-list"></i> Ver Catálogo</Link></li>
+                <li className="dropdownItem"><Link className="dropdownLink" to="/admin/all" onClick={() => setOpenMenu(null)}><i className="fas fa-boxes"></i> Inventario</Link></li>
+                <li className="dropdownItem"><Link className="dropdownLink" to="/addProduct" onClick={() => setOpenMenu(null)}><i className="fas fa-plus-circle"></i> Añadir Producto</Link></li>
+                <li className="dropdownItem"><Link className="dropdownLink" to="/modifyProduct" onClick={() => setOpenMenu(null)}><i className="fas fa-edit"></i> Modificar Producto</Link></li>
               </ul>
             </li>
-
-            {/* ===== Categorías (click) ===== */}
             <li className="menuItem dropdown" style={{ position: 'relative' }}>
-              <Link
-                className="menuLink"
-                to="#"
-                onClick={(e) => { e.preventDefault(); toggleMenu('categorias'); }}
-              >
+              <Link className="menuLink" to="#" onClick={(e) => { e.preventDefault(); toggleMenu('categorias'); }}>
                 Categorías <i className="fas fa-chevron-down"></i>
               </Link>
-              <ul
-                className="dropdown-content"
-                style={{
-                  display: openMenu === 'categorias' ? 'block' : 'none',
-                  position: 'absolute',
-                  zIndex: 99999
-                }}
-              >
-                <li className="dropdownItem">
-                  <Link className="dropdownLink" to="/addCategory" onClick={() => setOpenMenu(null)}>
-                    <i className="fas fa-folder-plus"></i> Crear Categoría
-                  </Link>
-                </li>
-                <li className="dropdownItem">
-                  <Link className="dropdownLink" to="/modifyCategory" onClick={() => setOpenMenu(null)}>
-                    <i className="fas fa-folder-minus"></i> Modificar Categoría
-                  </Link>
-                </li>
+              <ul className="dropdown-content" style={{ display: openMenu === 'categorias' ? 'block' : 'none', position: 'absolute', zIndex: 99999 }}>
+                <li className="dropdownItem"><Link className="dropdownLink" to="/addCategory" onClick={() => setOpenMenu(null)}><i className="fas fa-folder-plus"></i> Crear Categoría</Link></li>
+                <li className="dropdownItem"><Link className="dropdownLink" to="/modifyCategory" onClick={() => setOpenMenu(null)}><i className="fas fa-folder-minus"></i> Modificar Categoría</Link></li>
               </ul>
             </li>
-
             <li className="menuItem">
               <a href="#contacto" className="menuLink">Contacto</a>
             </li>
@@ -222,7 +161,6 @@ export default function AdminHome() {
       {/* ================= PRODUCTOS ================= */}
       <section id="productos" className="seccionProductosContenedor">
         <h2>¡Productos pensados para ti!</h2>
-
         {productos.length === 0 ? (
           <div className="estado-vacio">
             <p>No hay productos disponibles en este momento. ¡Vuelve pronto!</p>
@@ -235,20 +173,11 @@ export default function AdminHome() {
                   ? producto.images[0].imageUrl
                   : '/img/default-product.png';
               return (
-                <div
-                  key={producto.idBarcode}
-                  className={`producto ${!producto.active ? 'inactivo' : ''}`}
-                >
+                <div key={producto.idBarcode} className={`producto ${!producto.active ? 'inactivo' : ''}`}>
                   <img src={urlImagen} alt={producto.name} />
                   <h3>{producto.name}</h3>
-                  {!producto.active && (
-                    <span className="badge-estado badge-inactivo">Agotado</span>
-                  )}
-                  <p>
-                    {`$${Number(producto.price).toLocaleString('es-CO', {
-                      minimumFractionDigits: 0
-                    })} COP`}
-                  </p>
+                  {!producto.active && (<span className="badge-estado badge-inactivo">Agotado</span>)}
+                  <p>{`$${Number(producto.price).toLocaleString('es-CO', { minimumFractionDigits: 0 })} COP`}</p>
                   <Link className="boton-comprar" to={`/producto/detalle?barcode=${producto.idBarcode}`}>
                     Ver Detalle
                   </Link>
@@ -263,10 +192,7 @@ export default function AdminHome() {
       <section id="acerca">
         <div className="contenedor-acerca">
           <h2>¡Conócenos!</h2>
-          <p>
-            En <strong>Glow &amp; Glam</strong> somos una tienda dedicada a ofrecer
-            productos de maquillaje de alta calidad.
-          </p>
+          <p>En <strong>Glow &amp; Glam</strong> somos una tienda dedicada a ofrecer productos de maquillaje de alta calidad.</p>
         </div>
       </section>
 
@@ -274,29 +200,15 @@ export default function AdminHome() {
       <section id="contacto" className="contenedor-formulario">
         <div style={{ textAlign: 'center', marginBottom: '25px' }}>
           <h2>¿Tienes alguna pregunta?</h2>
-          <p style={{ color: '#666', fontSize: '0.9rem' }}>
-            Escríbenos y nuestro equipo te responderá en breve.
-          </p>
+          <p style={{ color: '#666', fontSize: '0.9rem' }}>Escríbenos y nuestro equipo te responderá en breve.</p>
         </div>
         <form onSubmit={handleContactSubmit}>
           <label htmlFor="name">Nombre:</label>
-          <input
-            id="name" type="text" required placeholder="Tu nombre completo"
-            value={contacto.name}
-            onChange={(e) => setContacto({ ...contacto, name: e.target.value })}
-          />
+          <input id="name" type="text" required placeholder="Tu nombre completo" value={contacto.name} onChange={(e) => setContacto({ ...contacto, name: e.target.value })} />
           <label htmlFor="email">Correo Electrónico:</label>
-          <input
-            id="email" type="email" required placeholder="ejemplo@correo.com"
-            value={contacto.email}
-            onChange={(e) => setContacto({ ...contacto, email: e.target.value })}
-          />
+          <input id="email" type="email" required placeholder="ejemplo@correo.com" value={contacto.email} onChange={(e) => setContacto({ ...contacto, email: e.target.value })} />
           <label htmlFor="message">Mensaje:</label>
-          <textarea
-            id="message" rows="5" required placeholder="¿En qué podemos ayudarte?"
-            value={contacto.message}
-            onChange={(e) => setContacto({ ...contacto, message: e.target.value })}
-          />
+          <textarea id="message" rows="5" required placeholder="¿En qué podemos ayudarte?" value={contacto.message} onChange={(e) => setContacto({ ...contacto, message: e.target.value })} />
           <button type="submit" style={{ marginTop: '15px' }}>Enviar Mensaje</button>
         </form>
       </section>
@@ -306,9 +218,7 @@ export default function AdminHome() {
         <p>&copy; 2026 Glow &amp; Glam</p>
       </footer>
 
-      <button id="btn-arriba" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
-        ↑
-      </button>
+      <button id="btn-arriba" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>↑</button>
     </div>
   );
 }
