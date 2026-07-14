@@ -111,13 +111,7 @@ export const Wishlist = ({ session }) => {
                   </Link>
                 </li>
               </>
-            ) : (
-              <li>
-                <Link to="/Login">
-                  <i className="fas fa-user"></i> Iniciar sesión
-                </Link>
-              </li>
-            )}
+            ) }
           </ul>
         </nav>
       </header>
