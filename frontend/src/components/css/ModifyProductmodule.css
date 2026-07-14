@@ -17,19 +17,16 @@
     font-size: 12px;
     padding: 10px 20px;
 }
-
 .marca {
     display: flex;
     align-items: center;
     gap: 10px;
     margin: 0;
 }
-
 .logo {
     height: 50px;
     width: auto;
 }
-
 .mainNav ul {
     list-style: none;
     display: flex;
@@ -37,7 +34,6 @@
     margin: 0;
     padding: 0;
 }
-
 .mainNav ul li a {
     text-decoration: none;
     color: black;
@@ -45,52 +41,48 @@
     border-radius: 5px;
     font-weight: bold;
 }
-
 .mainNav ul li a:hover {
     color: #AF1740;
 }
 
-/* --- CONTROL DROPDOWN --- */
+/* ================= DROPDOWN (controlado por click desde React) ================= */
 .dropdown {
     position: relative;
     display: inline-block;
 }
-
 .dropdown > a i {
     margin-left: 5px;
     font-size: 0.8rem;
 }
-
+/* El display lo maneja React con estado (inline style). Aquí solo el aspecto visual */
+.dropdown-content,
 .dropdownContent {
-    display: none;
     position: absolute;
-    background-color: #ffffff;
-    min-width: 180px;
-    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.1);
-    border-radius: 4px;
-    z-index: 1000;
     top: 100%;
     left: 0;
-    padding: 5px 0;
+    min-width: 200px;
+    background-color: #ffffff;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
     border: 1px solid #eee;
+    padding: 5px 0;
     list-style: none;
+    margin: 0;
+    z-index: 99999;
 }
-
+.dropdown-content li a,
 .dropdownContent li a {
     color: #333333 !important;
     padding: 10px 15px;
     text-decoration: none;
     display: block;
     font-size: 0.9rem;
+    font-weight: bold;
 }
-
+.dropdown-content li a:hover,
 .dropdownContent li a:hover {
     background-color: #f5f5f5;
     color: #AF1740 !important;
-}
-
-.dropdown:hover .dropdownContent {
-    display: block;
 }
 
 /* ================= CONTENEDOR DE FILTROS ================= */
@@ -103,34 +95,28 @@
     border-radius: 8px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
 }
-
 .cabeceraSeccion {
     text-align: left;
     margin-bottom: 25px;
 }
-
 .cabeceraSeccion h2 {
     margin: 0 0 5px 0;
     color: #333;
 }
-
 .cabeceraSeccion p {
     color: #666;
     font-size: 0.9rem;
     margin: 0;
 }
-
 .filtroCategoria {
     margin-bottom: 25px;
 }
-
 .filtroCategoria label {
     display: block;
     font-weight: bold;
     margin-bottom: 8px;
     color: #444;
 }
-
 .filtroCategoria select {
     width: 100%;
     padding: 10px;
@@ -141,74 +127,71 @@
     font-family: inherit;
 }
 
-/* ================= FILAS DE PRODUCTOS ================= */
+/* ================= FILAS DE PRODUCTOS (con fix anti-desborde) ================= */
 .listaProductosHorizontal {
     border-top: 1px solid #eee;
     padding-top: 20px;
 }
-
 .estadoVacio {
     text-align: center;
     color: #888;
     font-style: italic;
     padding: 20px 0;
 }
-
 .productoFila {
     display: flex;
     align-items: center;
     gap: 20px;
+    flex-wrap: wrap;            /* FIX: permite que el bloque de acciones baje si no cabe */
     padding: 15px;
     border: 1px solid #eee;
     border-radius: 6px;
     margin-bottom: 15px;
     background: #fff;
+    box-sizing: border-box;
     transition: box-shadow 0.2s;
 }
-
 .productoFila:hover {
     box-shadow: 0 2px 10px rgba(0,0,0,0.03);
 }
-
 .productoFila.inactivo {
     background-color: #fafafa;
     opacity: 0.8;
 }
-
 .imgWrapper {
     flex-shrink: 0;
 }
-
 .imagenProducto {
     width: 80px;
     height: 80px;
     object-fit: cover;
     border-radius: 5px;
     border: 1px solid #eaeaea;
+    display: block;
 }
-
 .infoBloque {
-    flex: 1;
+    flex: 1 1 220px;           /* crece y se encoge con base mínima */
+    min-width: 0;              /* FIX CLAVE: evita el desborde en flexbox */
 }
-
 .infoBloque h4 {
     margin: 0 0 8px 0;
     font-size: 1.1rem;
     color: #222;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;   /* nombres largos se recortan en vez de desbordar */
 }
-
 .detallesMeta {
     font-size: 0.85rem;
     color: #666;
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
     gap: 8px;
 }
-
 .separador {
     color: #ccc;
 }
-
 .barcodeTag {
     background-color: #f0f0f0;
     padding: 2px 6px;
@@ -221,35 +204,35 @@
 .accionBloque {
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
     gap: 15px;
+    margin-left: auto;         /* FIX: pega el bloque a la derecha sin salirse */
+    flex-shrink: 0;
 }
-
 .badgeEstado {
     font-size: 0.75rem;
     font-weight: bold;
     padding: 4px 8px;
     border-radius: 20px;
     text-transform: uppercase;
+    white-space: nowrap;
 }
-
 .badgeActivo {
     background-color: #e6f4ea;
     color: #137333;
 }
-
 .badgeInactivo {
     background-color: #fce8e6;
     color: #c5221f;
 }
-
 .precioTag {
     font-weight: bold;
     font-size: 1.05rem;
     color: #333;
     min-width: 100px;
     text-align: right;
+    white-space: nowrap;
 }
-
 .btnModificarFila {
     text-decoration: none;
     background-color: #333;
@@ -258,9 +241,10 @@
     border-radius: 4px;
     font-size: 0.9rem;
     font-weight: bold;
+    white-space: nowrap;
+    flex-shrink: 0;
     transition: background-color 0.2s;
 }
-
 .btnModificarFila:hover {
     background-color: #AF1740;
 }
@@ -276,9 +260,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 2000;
+    z-index: 100000;
 }
-
 .modalConfirmacionContenido {
     background: white;
     padding: 35px;
@@ -288,7 +271,6 @@
     width: 90%;
     box-shadow: 0 4px 20px rgba(0,0,0,0.15);
 }
-
 .iconoExito {
     width: 60px;
     height: 60px;
@@ -301,7 +283,6 @@
     font-size: 2rem;
     margin: 0 auto 15px auto;
 }
-
 .btnVolverInicio {
     display: inline-block;
     width: 100%;
@@ -313,11 +294,9 @@
     font-weight: bold;
     margin-top: 15px;
 }
-
 .btnVolverInicio:hover {
     background-color: #AF1740;
 }
-
 .btnCerrarModal {
     margin-top: 14px;
     background: none;
@@ -327,7 +306,6 @@
     text-decoration: underline;
     font-size: 0.9rem;
 }
-
 .btnCerrarModal:hover {
     color: #333;
 }
@@ -339,30 +317,7 @@
     width: 100%;
     margin-top: auto;
 }
-
 .mainFooter p {
     text-align: center;
     margin: 0;
-}
-
-/* 1. El contenedor padre debe tener posición relativa */
-.dropdown {
-  position: relative;
-  display: inline-block; /* O el comportamiento de flujo que ya tenga en tu flexbox */
-}
-
-/* 2. El menú oculto por defecto, con posicionamiento absoluto */
-.dropdown-content, .dropdownContent {
-  display: none;
-  position: absolute;
-  top: 100%; /* Se despliega justo abajo del texto padre */
-  left: 0;
-  z-index: 99999; /* Se superpone a los formularios e inventarios */
-  min-width: 200px; /* Ancho mínimo para que no se corte el texto */
-}
-
-/* 🔥 LA MAGIA DEL HOVER: Cuando el mouse entra a .dropdown, se muestra el hijo */
-.dropdown:hover .dropdown-content,
-.dropdown:hover .dropdownContent {
-  display: block !important;
 }
