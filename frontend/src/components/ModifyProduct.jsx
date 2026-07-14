@@ -1,28 +1,30 @@
-import React, { useState, useEffect } from 'react';
-// Importar Link para la correcta navegación dentro de la arquitectura SPA
-import { Link } from 'react-router-dom'; 
-import './css/ModifyProductmodule.css'; 
+import React, { useState, useEffect, useRef } from 'react';
+import { Link } from 'react-router-dom';
+import './css/ModifyProductmodule.css';
 import logo from './img/logo.png';
 
 export default function ModifyProduct() {
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('');
   const [products, setProducts] = useState([]);
-  
+
   const [loadingCategories, setLoadingCategories] = useState(true);
   const [loadingProducts, setLoadingProducts] = useState(false);
   const [errorProducts, setErrorProducts] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
 
+  const [openMenu, setOpenMenu] = useState(null);
+  const navRef = useRef(null);
+
   useEffect(() => {
     const cargarCategorias = async () => {
       try {
-        const resp = await fetch("/api/categories");
+        const resp = await fetch('/api/categories', { credentials: 'include' });
         if (!resp.ok) throw new Error();
         const data = await resp.json();
         setCategories(data);
       } catch (e) {
-        console.error("Error cargando categorías", e);
+        console.error('Error cargando categorías', e);
       } finally {
         setLoadingCategories(false);
       }
@@ -30,26 +32,24 @@ export default function ModifyProduct() {
     cargarCategorias();
 
     const params = new URLSearchParams(window.location.search);
-    if (params.get('success') !== null) {
-      setShowSuccessModal(true);
-    }
+    if (params.get('success') !== null) setShowSuccessModal(true);
   }, []);
 
   useEffect(() => {
     if (!selectedCategory) return;
-
     const cargarProductos = async () => {
       setLoadingProducts(true);
       setErrorProducts(false);
       try {
-        const resp = await fetch(`/api/products/category?name=${encodeURIComponent(selectedCategory)}`, {
-          credentials: 'include'
-        });
+        const resp = await fetch(
+          `/api/products/category?name=${encodeURIComponent(selectedCategory)}`,
+          { credentials: 'include' }
+        );
         if (!resp.ok) throw new Error();
         const data = await resp.json();
         setProducts(data);
       } catch (e) {
-        console.error("Error al cargar los productos por categoría:", e);
+        console.error('Error al cargar los productos por categoría:', e);
         setErrorProducts(true);
         setProducts([]);
       } finally {
@@ -59,6 +59,16 @@ export default function ModifyProduct() {
     cargarProductos();
   }, [selectedCategory]);
 
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (navRef.current && !navRef.current.contains(e.target)) setOpenMenu(null);
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const toggleMenu = (menu) => setOpenMenu((prev) => (prev === menu ? null : menu));
+
   const cerrarModal = () => {
     setShowSuccessModal(false);
     window.history.replaceState({}, document.title, window.location.pathname);
@@ -66,43 +76,43 @@ export default function ModifyProduct() {
 
   return (
     <div className="bodyWrapper" style={{ position: 'relative', minHeight: '100vh' }}>
-      
-      {/* ================= HEADER & NAV GLOBAL COMPORTAMIENTO FORZADO ================= */}
       <header className="mainHeader" style={{ position: 'relative', zIndex: 9999, overflow: 'visible' }}>
         <h1 className="marca">
           <img src={logo} alt="GlowGlam Logo" className="logo" />
         </h1>
-        <nav className="mainNav" style={{ overflow: 'visible' }}>
+        <nav className="mainNav" ref={navRef} style={{ overflow: 'visible' }}>
           <ul style={{ overflow: 'visible' }}>
-            
             <li className="menuItem dropdown" style={{ position: 'relative', overflow: 'visible' }}>
-              <Link to="#" onClick={(e) => e.preventDefault()}>
+              <Link to="#" onClick={(e) => { e.preventDefault(); toggleMenu('productos'); }}>
                 Productos <i className="fas fa-chevron-down"></i>
               </Link>
-              <ul className="dropdown-content" style={{ display: 'none', position: 'absolute', zIndex: 99999 }}>
-                <li><Link to="/adminHome"><i className="fas fa-th-list"></i> Ver Catálogo</Link></li>
-                <li><Link to="/admin/all"><i className="fas fa-boxes"></i> Inventario </Link></li>
-                <li><Link to="/addProduct"><i className="fas fa-plus-circle"></i> Añadir Producto</Link></li>
-                <li><Link to="/modifyProduct"><i className="fas fa-edit"></i> Modificar Producto</Link></li>
+              <ul
+                className="dropdown-content"
+                style={{ display: openMenu === 'productos' ? 'block' : 'none', position: 'absolute', zIndex: 99999 }}
+              >
+                <li><Link to="/adminHome" onClick={() => setOpenMenu(null)}><i className="fas fa-th-list"></i> Ver Catálogo</Link></li>
+                <li><Link to="/admin/all" onClick={() => setOpenMenu(null)}><i className="fas fa-boxes"></i> Inventario</Link></li>
+                <li><Link to="/addProduct" onClick={() => setOpenMenu(null)}><i className="fas fa-plus-circle"></i> Añadir Producto</Link></li>
+                <li><Link to="/modifyProduct" onClick={() => setOpenMenu(null)}><i className="fas fa-edit"></i> Modificar Producto</Link></li>
               </ul>
             </li>
-
             <li className="menuItem dropdown" style={{ position: 'relative', overflow: 'visible' }}>
-              <Link to="#" onClick={(e) => e.preventDefault()}>
+              <Link to="#" onClick={(e) => { e.preventDefault(); toggleMenu('categorias'); }}>
                 Categorías <i className="fas fa-chevron-down"></i>
               </Link>
-              <ul className="dropdown-content" style={{ display: 'none', position: 'absolute', zIndex: 99999 }}>
-                <li><Link to="/addCategory"><i className="fas fa-folder-plus"></i> Crear Categoría</Link></li>
-                <li><Link to="/modifyCategory"><i className="fas fa-folder-minus"></i> Modificar Categoría</Link></li>
+              <ul
+                className="dropdown-content"
+                style={{ display: openMenu === 'categorias' ? 'block' : 'none', position: 'absolute', zIndex: 99999 }}
+              >
+                <li><Link to="/addCategory" onClick={() => setOpenMenu(null)}><i className="fas fa-folder-plus"></i> Crear Categoría</Link></li>
+                <li><Link to="/modifyCategory" onClick={() => setOpenMenu(null)}><i className="fas fa-folder-minus"></i> Modificar Categoría</Link></li>
               </ul>
             </li>
-
             <li><Link to="/"><i className="fas fa-sign-out-alt"></i> Cerrar sesión</Link></li>
           </ul>
         </nav>
       </header>
 
-      {/* ================= CONTENEDOR PRINCIPAL (Z-INDEX BAJO) ================= */}
       <main className="contenedorFormulario" style={{ position: 'relative', zIndex: 1 }}>
         <div className="cabeceraSeccion">
           <h2>Modificar Producto</h2>
@@ -112,16 +122,13 @@ export default function ModifyProduct() {
         <div className="filtroCategoria">
           <label htmlFor="filtro-cat">Filtrar por categoría:</label>
           <select
-            id="filtro-cat"
-            value={selectedCategory}
+            id="filtro-cat" value={selectedCategory}
             onChange={(e) => setSelectedCategory(e.target.value)}
             disabled={loadingCategories}
           >
             <option value="" disabled>-- Seleccione una categoría --</option>
             {categories.map((cat) => (
-              <option key={cat.id || cat.name} value={cat.name}>
-                {cat.name}
-              </option>
+              <option key={cat.id || cat.name} value={cat.name}>{cat.name}</option>
             ))}
           </select>
         </div>
@@ -133,26 +140,18 @@ export default function ModifyProduct() {
           {!loadingProducts && !errorProducts && selectedCategory && products.length === 0 && (
             <p className="estadoVacio">No hay productos en esta categoría.</p>
           )}
-
           {!loadingProducts && !errorProducts && products.map((p) => {
             const primeraImagenUrl = p.images && p.images.length > 0
               ? p.images[0].imageUrl
               : 'https://via.placeholder.com/80?text=Glam';
-
             return (
               <div key={p.idBarcode} className={`productoFila ${!p.active ? 'inactivo' : ''}`}>
                 <div className="imgWrapper">
                   <img
-                    src={primeraImagenUrl}
-                    alt={p.name}
-                    className="imagenProducto"
-                    onError={(e) => { 
-                      e.currentTarget.onerror = null; 
-                      e.currentTarget.src = 'https://via.placeholder.com/80?text=Glam'; 
-                    }}
+                    src={primeraImagenUrl} alt={p.name} className="imagenProducto"
+                    onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = 'https://via.placeholder.com/80?text=Glam'; }}
                   />
                 </div>
-
                 <div className="infoBloque">
                   <h4>{p.name}</h4>
                   <div className="detallesMeta">
@@ -161,20 +160,13 @@ export default function ModifyProduct() {
                     <span className="barcodeTag">{p.idBarcode}</span>
                   </div>
                 </div>
-
                 <div className="accionBloque">
                   <span className={`badgeEstado ${p.active ? 'badgeActivo' : 'badgeInactivo'}`}>
-                    {p.active ? "Activo" : "Inactivo"}
+                    {p.active ? 'Activo' : 'Inactivo'}
                   </span>
                   <span className="precioTag">
-                    {Number(p.price).toLocaleString('es-CO', {
-                      style: 'currency',
-                      currency: 'COP',
-                      minimumFractionDigits: 0
-                    })}
+                    {Number(p.price).toLocaleString('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0 })}
                   </span>
-                  
-                  {/* Navegación controlada a la pantalla de edición física de variables */}
                   <Link to={`/updateProduct?barcode=${encodeURIComponent(p.idBarcode)}`} className="btnModificarFila">
                     Modificar
                   </Link>
@@ -185,12 +177,10 @@ export default function ModifyProduct() {
         </div>
       </main>
 
-      {/* ================= FOOTER ================= */}
       <footer className="mainFooter" style={{ position: 'relative', zIndex: 1 }}>
         <p>&copy; 2026 GlowGlam S.A. Todos los derechos reservados.</p>
       </footer>
 
-      {/* ================= MODAL DE CONFIRMACIÓN FORZADO ARRIBA ================= */}
       {showSuccessModal && (
         <div className="modalConfirmacionContainer" style={{ zIndex: 100000 }} onClick={cerrarModal}>
           <div className="modalConfirmacionContenido" onClick={(e) => e.stopPropagation()}>
