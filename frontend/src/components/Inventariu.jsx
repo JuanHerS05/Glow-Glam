@@ -8,12 +8,9 @@ export default function Inventario() {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
-
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('TODAS');
   const [selectedStatus, setSelectedStatus] = useState('TODOS');
-
-  // Menús desplegables por click
   const [openMenu, setOpenMenu] = useState(null);
   const navRef = useRef(null);
 
@@ -22,16 +19,13 @@ export default function Inventario() {
       try {
         setLoading(true);
         setError(false);
-
         const respCat = await fetch('/api/categories', { credentials: 'include' });
         if (respCat.ok) {
           const catData = await respCat.json();
           setCategories(Array.isArray(catData) ? catData : []);
         }
-
         const respProd = await fetch('/api/products/admin/all?role=ADMIN', { credentials: 'include' });
         if (!respProd.ok) throw new Error('Error al conectar con el inventario del servidor');
-
         const prodData = await respProd.json();
         setProductsList(Array.isArray(prodData) ? prodData : []);
       } catch (err) {
@@ -81,44 +75,27 @@ export default function Inventario() {
         </h1>
         <nav className="mainNav" ref={navRef} style={{ overflow: 'visible' }}>
           <ul style={{ overflow: 'visible' }}>
-            {/* ===== Productos (click) ===== */}
             <li className="dropdown" style={{ position: 'relative', overflow: 'visible' }}>
               <Link to="#" onClick={(e) => { e.preventDefault(); toggleMenu('productos'); }}>
                 Productos <i className="fas fa-chevron-down"></i>
               </Link>
-              <ul
-                className="dropdownContent"
-                style={{
-                  display: openMenu === 'productos' ? 'block' : 'none',
-                  position: 'absolute', zIndex: 99999
-                }}
-              >
+              <ul className="dropdownContent" style={{ display: openMenu === 'productos' ? 'block' : 'none', position: 'absolute', zIndex: 99999 }}>
                 <li><Link to="/adminHome" onClick={() => setOpenMenu(null)}><i className="fas fa-th-list"></i> Ver Catálogo</Link></li>
                 <li><Link to="/admin/all" onClick={() => setOpenMenu(null)}><i className="fas fa-boxes"></i> Inventario</Link></li>
                 <li><Link to="/addProduct" onClick={() => setOpenMenu(null)}><i className="fas fa-plus-circle"></i> Añadir Producto</Link></li>
-                {/* CORRECCIÓN problema 3: apunta a la pantalla de selección, no a /updateProduct */}
                 <li><Link to="/modifyProduct" onClick={() => setOpenMenu(null)}><i className="fas fa-edit"></i> Modificar Producto</Link></li>
               </ul>
             </li>
-
-            {/* ===== Categorías (click) ===== */}
             <li className="dropdown" style={{ position: 'relative', overflow: 'visible' }}>
               <Link to="#" onClick={(e) => { e.preventDefault(); toggleMenu('categorias'); }}>
                 Categorías <i className="fas fa-chevron-down"></i>
               </Link>
-              <ul
-                className="dropdownContent"
-                style={{
-                  display: openMenu === 'categorias' ? 'block' : 'none',
-                  position: 'absolute', zIndex: 99999
-                }}
-              >
+              <ul className="dropdownContent" style={{ display: openMenu === 'categorias' ? 'block' : 'none', position: 'absolute', zIndex: 99999 }}>
                 <li><Link to="/addCategory" onClick={() => setOpenMenu(null)}><i className="fas fa-folder-plus"></i> Crear Categoría</Link></li>
                 <li><Link to="/modifyCategory" onClick={() => setOpenMenu(null)}><i className="fas fa-folder-minus"></i> Modificar Categoría</Link></li>
               </ul>
             </li>
-
-            <li><Link to="/"><i className="fas fa-sign-out-alt"></i> Volver a Inicio</Link></li>
+            <li><Link to="/adminHome"><i className="fas fa-th-list"></i> Volver a Inicio</Link></li>
           </ul>
         </nav>
       </header>
@@ -128,22 +105,16 @@ export default function Inventario() {
           <h2>Control de Inventario General</h2>
           <p>Visualiza, filtra y gestiona todo el catálogo de productos de la tienda.</p>
         </div>
-
         <div className="panelFiltros">
           <div className="filtroBusqueda">
             <label htmlFor="search-input">Buscar por Nombre o Marca:</label>
-            <input
-              type="text" id="search-input" placeholder="Ej: Corrector, Atenea..."
-              value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)}
-            />
+            <input type="text" id="search-input" placeholder="Ej: Corrector, Atenea..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
           </div>
           <div className="filtroCategory">
             <label htmlFor="filter-category">Categoría:</label>
             <select id="filter-category" value={selectedCategory} onChange={(e) => setSelectedCategory(e.target.value)}>
               <option value="TODAS">-- Todas las Categorías --</option>
-              {categories.map((cat) => (
-                <option key={cat.id || cat.name} value={cat.name}>{cat.name}</option>
-              ))}
+              {categories.map((cat) => (<option key={cat.id || cat.name} value={cat.name}>{cat.name}</option>))}
             </select>
           </div>
           <div className="filtroEstado">
@@ -155,25 +126,17 @@ export default function Inventario() {
             </select>
           </div>
         </div>
-
         <div className="listaProductosHorizontal">
           {loading && <p className="estadoVacio">Sincronizando inventario...</p>}
-          {error && !loading && (
-            <p className="estadoVacio errorColor">✖ Error de conexión con el inventario de la base de datos.</p>
-          )}
-          {!loading && !error && filteredProducts.length === 0 && (
-            <p className="estadoVacio">No se encontraron productos que coincidan con los filtros aplicados.</p>
-          )}
+          {error && !loading && (<p className="estadoVacio errorColor">✖ Error de conexión con el inventario de la base de datos.</p>)}
+          {!loading && !error && filteredProducts.length === 0 && (<p className="estadoVacio">No se encontraron productos que coincidan con los filtros aplicados.</p>)}
           {!loading && !error && filteredProducts.map((p) => {
             if (!p) return null;
             const urlImagen = p.images && p.images.length > 0 ? p.images[0].imageUrl : 'https://via.placeholder.com/60?text=Glam';
             return (
               <div key={p.idBarcode} className={`productoFila ${!p.active ? 'inactivo' : ''}`}>
                 <div className="infoColumna">
-                  <img
-                    src={urlImagen} alt={p.name || 'Producto'} className="imagenProducto"
-                    onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = 'https://via.placeholder.com/60?text=Glam'; }}
-                  />
+                  <img src={urlImagen} alt={p.name || 'Producto'} className="imagenProducto" onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = 'https://via.placeholder.com/60?text=Glam'; }} />
                   <div className="detallesTextuales">
                     <h4>{p.name}</h4>
                     <div className="metaInfoContainer">
@@ -184,16 +147,9 @@ export default function Inventario() {
                   </div>
                 </div>
                 <div className="accionesColumna">
-                  <span className="precioTexto">
-                    ${Number(p.price || 0).toLocaleString('es-CO', { minimumFractionDigits: 0 })} COP
-                  </span>
-                  <span className={`badgeEstado ${p.active ? 'badgeActivo' : 'badgeInactivo'}`}>
-                    {p.active ? 'Activo' : 'Inactivo'}
-                  </span>
-                  {/* El botón por fila SÍ debe ir a /updateProduct con el barcode del producto */}
-                  <Link to={`/updateProduct?barcode=${encodeURIComponent(p.idBarcode || '')}`} className="btnModificarFila">
-                    <i className="fas fa-edit"></i> Modificar
-                  </Link>
+                  <span className="precioTexto">${Number(p.price || 0).toLocaleString('es-CO', { minimumFractionDigits: 0 })} COP</span>
+                  <span className={`badgeEstado ${p.active ? 'badgeActivo' : 'badgeInactivo'}`}>{p.active ? 'Activo' : 'Inactivo'}</span>
+                  <Link to={`/updateProduct?barcode=${encodeURIComponent(p.idBarcode || '')}`} className="btnModificarFila"><i className="fas fa-edit"></i> Modificar</Link>
                 </div>
               </div>
             );
