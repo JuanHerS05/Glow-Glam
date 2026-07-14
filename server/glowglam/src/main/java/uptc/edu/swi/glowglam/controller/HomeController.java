@@ -48,16 +48,15 @@ public class HomeController {
 
     // GET: http://localhost:8080/api/home/check-admin
     // Un endpoint rápido para que el Front verifique si el usuario actual es ADMIN antes de dejarlo entrar a las vistas de administración
-    @GetMapping("/check-admin")
+    @GetMapping("/checkAdmin")
     public ResponseEntity<?> checkAdminStatus(HttpSession session) {
         Role usuario = (Role) session.getAttribute("usuarioLogueado");
-       return ResponseEntity.status(HttpStatus.AUTHORIZED).body(usuario.getEmail());
-    /*    
+    
         if (usuario == null || usuario.getRole() != RoleEnum.ADMIN) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Acceso no autorizado.");
         }
         
         // Si es admin, responde un 200 OK indicando que puede proceder
-        return ResponseEntity.ok().build();*/
+        return ResponseEntity.ok().build();
     } 
 }
