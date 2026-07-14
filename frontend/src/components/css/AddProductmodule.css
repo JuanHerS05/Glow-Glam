@@ -282,4 +282,30 @@
     padding: 10px 20px;
     text-decoration: none;
     border-radius: 4px;
-    margin-top:
+    margin-top: 15px;
+    font-weight: bold;
+    transition: background 0.2s;
+}
+.btnVolverInicio:hover {
+    background-color: #8c1233;
+}
+.btnCerrarModal {
+    margin-top: 14px;
+    background: none;
+    border: none;
+    color: #888;
+    cursor: pointer;
+    text-decoration: underline;
+    font-size: 0.9rem;
+}
+/* ================= FOOTER ================= */
+.mainFooter {
+    background-color: #f5f4f4;
+    padding: 20px;
+    width: 100%;
+    margin-top: auto;
+}
+.mainFooter p {
+    text-align: center;
+    margin: 0;
+}
