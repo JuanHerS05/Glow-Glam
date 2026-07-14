@@ -58,6 +58,6 @@ public class HomeController {
         }
         
         // Si es admin, responde un 200 OK indicando que puede proceder
-        return ResponseEntity.ok().build();
-    } */
+        return ResponseEntity.ok().build();*/
+    } 
 }
