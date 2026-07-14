@@ -1,23 +1,21 @@
 .bodyWrapper {
     font-family: 'Tahoma', sans-serif;
-    color: rgb(34, 33, 33); 
+    color: rgb(34, 33, 33);
     background-color: #f9f9f9;
     display: flex;
     flex-direction: column;
     min-height: 100vh;
 }
-
-/* ================= HEADER Y NAVEGACIÓN ================= */
+/* ================= HEADER Y NAVEGACIÓN (estándar) ================= */
 .mainHeader {
-    display: flex; 
-    align-items: center; 
-    justify-content: space-between; 
-    border-top: 30px solid #740938; 
-    background-color: rgb(246, 243, 243); 
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-top: 30px solid #740938;
+    background-color: rgb(246, 243, 243);
     font-size: 12px;
     padding: 10px 20px;
 }
-
 .marca {
     display: flex;
     align-items: center;
@@ -26,126 +24,100 @@
     font-size: 1.5rem;
     color: rgb(34, 33, 33);
 }
-
 .logo {
-    height: 50px; 
-    width: auto; 
+    height: 50px;
+    width: auto;
 }
-
 .mainNav ul {
-    list-style: none; 
-    display: flex; 
-    gap: 15px; 
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 15px;
     margin: 0;
     padding: 0;
 }
-
 .mainNav ul li a {
-    text-decoration: none; 
-    color: black; 
+    text-decoration: none;
+    color: black;
     padding: 10px 15px;
-    border-radius: 5px; 
+    border-radius: 5px;
     font-weight: bold;
+    cursor: pointer;
 }
-
 .mainNav ul li a:hover {
     color: #AF1740;
 }
-
-/* --- MENÚ DESPLEGABLE (DROPDOWN) --- */
+/* Dropdown: el display lo controla React (inline). Aquí solo apariencia. */
 .dropdown {
     position: relative;
     display: inline-block;
 }
-
 .dropdown > a i {
     margin-left: 5px;
     font-size: 0.8rem;
-    transition: transform 0.3s;
 }
-
+.dropdown-content,
 .dropdownContent {
-    display: none;
     position: absolute;
-    background-color: #ffffff;
-    min-width: 180px;
-    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.1);
-    border-radius: 4px;
-    z-index: 1000;
     top: 100%;
     left: 0;
-    padding: 5px 0;
+    min-width: 200px;
+    background-color: #ffffff;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
     border: 1px solid #eee;
+    padding: 5px 0;
+    margin: 0;
     list-style: none;
+    z-index: 99999;
 }
-
-.dropdownContent li {
-    display: block;
-    margin: 0 !important;
-}
-
+.dropdown-content li a,
 .dropdownContent li a {
     color: #333333 !important;
     padding: 10px 15px;
     text-decoration: none;
     display: block;
-    text-align: left;
     font-size: 0.9rem;
-    transition: background 0.2s, color 0.2s;
+    font-weight: bold;
 }
-
+.dropdown-content li a:hover,
 .dropdownContent li a:hover {
     background-color: #f5f5f5;
     color: #AF1740 !important;
 }
-
-.dropdown:hover .dropdownContent {
-    display: block;
-}
-
-.dropdown:hover > a i {
-    transform: rotate(180deg);
-}
-
 /* ================= CONTENEDOR FORMULARIO ================= */
 .contenedorFormulario {
-    width: 95%;          
-    max-width: 600px;    
-    margin: 40px auto 60px auto;   
+    width: 95%;
+    max-width: 600px;
+    margin: 40px auto 60px auto;
     background-color: #ffffff;
-    padding: 35px;       
+    padding: 35px;
     border-radius: 10px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
-
 .formHeader {
-    text-align: center; 
+    text-align: center;
     margin-bottom: 25px;
 }
-
 .formHeader h2 {
     color: #333;
     margin-bottom: 5px;
 }
-
 .formHeader p {
-    color: #666; 
+    color: #666;
     font-size: 0.9rem;
 }
-
 .formElement {
     width: 100%;
     text-align: left;
 }
-
 .formElement label {
     display: block;
     margin: 14px 0 6px;
     font-weight: bold;
     font-size: 0.9rem;
 }
-
-.formElement input[type="text"], 
+.formElement input[type="text"],
 .formElement textarea {
     width: 100%;
     padding: 11px;
@@ -155,13 +127,11 @@
     font-family: 'Tahoma', sans-serif;
     background-color: #fff;
 }
-
 .formElement textarea {
     font-family: inherit;
     padding: 10px;
     resize: vertical;
 }
-
 .formElement button {
     width: 100%;
     padding: 12px;
@@ -175,16 +145,13 @@
     font-size: 1rem;
     transition: background-color 0.2s ease;
 }
-
 .formElement button:hover:not(:disabled) {
     background-color: #AF1740;
 }
-
 .formElement button:disabled {
     background-color: #ccc;
     cursor: not-allowed;
 }
-
 /* --- GRUPO CHECKBOX --- */
 .formCheckboxGroup {
     display: flex;
@@ -193,20 +160,17 @@
     margin-top: 20px;
     margin-bottom: 20px;
 }
-
 .formCheckboxGroup input[type="checkbox"] {
     width: auto;
     margin: 0;
     cursor: pointer;
 }
-
 .labelInline {
     display: inline-block;
     margin: 0 !important;
     font-weight: bold;
     cursor: pointer;
 }
-
 /* --- MENSAJE DE ERROR --- */
 .errorMessage {
     color: #c5221f;
@@ -217,7 +181,6 @@
     text-align: center;
     font-weight: bold;
 }
-
 /* ================= VENTANA MODAL ================= */
 .modalConfirmacionContainer {
     position: fixed;
@@ -225,13 +188,12 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.6); 
-    display: flex; 
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
     justify-content: center;
     align-items: center;
     z-index: 9999;
 }
-
 .modalConfirmacionContenido {
     background-color: #ffffff;
     padding: 30px;
@@ -242,80 +204,5 @@
     width: 90%;
     animation: fademodal 0.3s ease-out;
 }
-
 @keyframes fademodal {
-    from { transform: scale(0.8); opacity: 0; }
-    to { transform: scale(1); opacity: 1; }
-}
-
-.iconoExito {
-    font-size: 3.5rem;
-    color: #28a745;
-    margin-bottom: 15px;
-    width: auto;
-    height: auto;
-    background-color: transparent;
-    line-height: normal;
-    border-radius: 0;
-}
-
-.btnVolverInicio {
-    display: inline-block;
-    background-color: #AF1740;
-    color: white !important;
-    padding: 10px 20px;
-    text-decoration: none;
-    border-radius: 4px;
-    margin-top: 15px;
-    font-weight: bold;
-    transition: background 0.2s;
-}
-
-.btnVolverInicio:hover {
-    background-color: #8c1233;
-}
-
-.btnCerrarModalCat {
-    margin-top: 14px; 
-    background: none; 
-    border: none; 
-    color: #888; 
-    cursor: pointer; 
-    text-decoration: underline; 
-    font-size: 0.9rem;
-}
-
-/* ================= FOOTER ================= */
-.mainFooter {
-    background-color: #f5f4f4; 
-    padding: 20px;
-    width: 100%; 
-    margin-top: auto; 
-}
-
-.mainFooter p {
-    text-align: center;
-    margin: 0;
-}
-
-/* 1. El contenedor padre debe tener posición relativa */
-.dropdown {
-  position: relative;
-  display: inline-block; /* O el comportamiento de flujo que ya tenga en tu flexbox */
-}
-
-/* 2. El menú oculto por defecto, con posicionamiento absoluto */
-.dropdown-content, .dropdownContent {
-  display: none;
-  position: absolute;
-  top: 100%; /* Se despliega justo abajo del texto padre */
-  left: 0;
-  z-index: 99999; /* Se superpone a los formularios e inventarios */
-  min-width: 200px; /* Ancho mínimo para que no se corte el texto */
-}
-
-/* 🔥 LA MAGIA DEL HOVER: Cuando el mouse entra a .dropdown, se muestra el hijo */
-.dropdown:hover .dropdown-content,
-.dropdown:hover .dropdownContent {
-  display: block !important;
-}
+    from {
