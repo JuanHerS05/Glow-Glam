@@ -1,252 +1,385 @@
 import React, { useState, useEffect, useMemo } from 'react';
-// CORRECCIÓN: Importamos Link para evitar recargas completas de la SPA
-import { Link } from 'react-router-dom'; 
-import './css/AdminAllProductsmodule.css'; 
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import './css/DetalleProducto.css'; 
 import logo from './img/logo.png';
-    
-export default function Inventario() {
-  // Estados para almacenar la información de la API
-  const [productsList, setProductsList] = useState([]);
-  const [categories, setCategories] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
 
-  // Estados de los filtros
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('TODAS');
-  const [selectedStatus, setSelectedStatus] = useState('TODOS');
+export default function DetalleProducto({ session }) {
+    const location = useLocation();
+    const navigate = useNavigate();
 
-  // Cargar categorías y productos al montar el componente
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        setError(false);
+    // --- LECTURA DEL BARCODE DESDE LA URL ---
+    const barcodeQuery = useMemo(() => {
+        const params = new URLSearchParams(location.search);
+        return params.get('barcode');
+    }, [location.search]);
 
-        // Petición de categorías
-        const respCat = await fetch('/api/categories');
-        if (respCat.ok) {
-          const catData = await respCat.json();
-          setCategories(Array.isArray(catData) ? catData : []);
-        } else {
-          console.error('Error al mapear categorías:', respCat.status);
+    // --- ESTADOS INTERNOS DEL PRODUCTO ---
+    const [product, setProduct] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [promedioRating, setPromedioRating] = useState(0);
+    const [totalRatings, setTotalRatings] = useState(0);
+
+    // Estados de Galería de Imágenes
+    const [indiceActualImg, setIndiceActualImg] = useState(0);
+
+    // Estados de Wishlist (Favoritos)
+    const [isInWishlist, setIsInWishlist] = useState(false);
+
+    // Estados de Calificación e Interfaz
+    const [score, setScore] = useState(5); 
+    const [comment, setComment] = useState('');
+    const [alertSuccess, setAlertSuccess] = useState('');
+    const [alertError, setAlertError] = useState('');
+
+    // --- 📦 INYECCIÓN DE FONT AWESOME ---
+    useEffect(() => {
+        const linkId = 'font-awesome-cdn';
+        if (!document.getElementById(linkId)) {
+            const link = document.createElement('link');
+            link.id = linkId;
+            link.rel = 'stylesheet';
+            link.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css';
+            document.head.appendChild(link);
         }
+    }, []);
 
-        // Petición de productos con rol ADMIN
-        const respProd = await fetch('/api/products/admin/all?role=ADMIN');
-        if (!respProd.ok) {
-          throw new Error('Error al conectar con el inventario del servidor');
+    // --- 🔄 CARGA INICIAL DEL PRODUCTO Y ESTADO DE WISHLIST ---
+    useEffect(() => {
+        if (!barcodeQuery) return;
+
+        const cargarDetalleProducto = async () => {
+            setLoading(true);
+            try {
+                const res = await fetch(`/api/products/barcode/${barcodeQuery}`, {
+                    credentials: 'include'
+                });
+                
+                if (res.ok) {
+                    const data = await res.json();
+                    setProduct(data);
+                    setPromedioRating(data.averageRating || 0);
+                    setTotalRatings(data.totalRatings || 0);
+                    
+                    setIsInWishlist(!!data.inWishlist);
+                } else {
+                    console.error("El servidor respondió con un error al buscar el producto");
+                    setProduct(null);
+                }
+            } catch (error) {
+                console.error("Error de red al conectar con el backend:", error);
+                setProduct(null);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        cargarDetalleProducto();
+    }, [barcodeQuery, session]);
+
+    // --- 🎠 NAVEGACIÓN DE LA GALERÍA DE IMÁGENES ---
+    const imagenesList = useMemo(() => {
+        if (product && product.images && product.images.length > 0) {
+            return product.images.map(img => img.imageUrl);
         }
-        
-        const prodData = await respProd.json();
-        setProductsList(Array.isArray(prodData) ? prodData : []);
-      } catch (err) {
-        console.error('Error en la carga de datos:', err);
-        setError(true);
-      } finally {
-        setLoading(false);
-      }
+        return ['https://via.placeholder.com/450?text=Glam+Product'];
+    }, [product]);
+
+    const navegarImagen = (direccion) => {
+        if (imagenesList.length <= 1) return;
+        setIndiceActualImg((prevIndex) => {
+            let nuevoIndex = prevIndex + direccion;
+            if (nuevoIndex < 0) return imagenesList.length - 1;
+            if (nuevoIndex >= imagenesList.length) return 0;
+            return nuevoIndex;
+        });
     };
 
-    fetchData();
-  }, []);
+    // --- 🚪 FUNCIÓN DE CIERRE DE SESIÓN ---
+    const handleLogout = async (e) => {
+        e.preventDefault();
+        try {
+            // 1. Petición al backend para destruir la sesión del servidor (Spring Boot/Java)
+            // Se asume el endpoint estándar de logout (GET o POST /logout o /api/logout)
+            await fetch('/logout', { 
+                method: 'POST', // Spring Security suele preferir POST, si falla puedes probar con GET
+                credentials: 'include' 
+            });
+        } catch (err) {
+            console.error('Error al cerrar sesión en el servidor:', err);
+        } finally {
+            // 2. Forzamos una redirección limpia a la raíz. 
+            // Usar window.location.href en lugar de navigate('/') es ideal en estos casos 
+            // ya que recarga la página por completo, limpiando instantáneamente la memoria de React y el estado 'session'.
+            window.location.href = '/';
+        }
+    };
 
-  // Lógica del Filtro Combinado Reactivo en memoria
-  const filteredProducts = useMemo(() => {
-    const searchNormalized = searchTerm.toLowerCase().trim();
-    if (!Array.isArray(productsList)) return [];
+    // --- 🛒 INTEGRACIÓN ASÍNCRONA DE WISHLIST ---
+    const handleInteractuarWishlist = async () => {
+        if (!session?.usuarioLogueado) {
+            navigate('/Login');
+            return;
+        }
 
-    return productsList.filter((product) => {
-      if (!product) return false;
-      
-      // Extraer y validar Nombre y Marca
-      const name = product.name ? product.name.toLowerCase() : '';
-      const brand = product.brand ? product.brand.toLowerCase() : '';
-      const matchesText = name.includes(searchNormalized) || brand.includes(searchNormalized);
+        try {
+            const response = await fetch('/api/wishlist/toggle', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                credentials: 'include',
+                body: JSON.stringify({
+                    barcode: barcodeQuery
+                })
+            });
 
-      // Comprobar Filtro de Categoría
-      const matchesCategory =
-        selectedCategory === 'TODAS' ||
-        (product.category && product.category.name === selectedCategory) ||
-        product.categoryName === selectedCategory;
+            if (response.status === 401) {
+                navigate('/Login');
+                return;
+            }
 
-      // Comprobar Filtro de Estado
-      let matchesStatus = true;
-      if (selectedStatus === 'ACTIVO') matchesStatus = product.active === true;
-      if (selectedStatus === 'INACTIVO') matchesStatus = product.active === false;
+            const data = await response.json();
 
-      return matchesText && matchesCategory && matchesStatus;
-    });
-  }, [productsList, searchTerm, selectedCategory, selectedStatus]);
+            if (data.status === 'added') {
+                setIsInWishlist(true);
+            } else if (data.status === 'removed') {
+                setIsInWishlist(false);
+            }
 
-  return (
-    <div className="bodyWrapper" style={{ position: 'relative', minHeight: '100vh' }}>
-      
-      {/* ================= HEADER & NAV GLOBAL COMPORTAMIENTO FORZADO ================= */}
-      <header className="mainHeader" style={{ position: 'relative', zIndex: 9999, overflow: 'visible' }}>
-        <h1 className="marca">
-          <img src={logo} alt="GlowGlam Logo" className="logo" />
-        </h1>
-        <nav className="mainNav" style={{ overflow: 'visible' }}>
-          <ul style={{ overflow: 'visible' }}>
-            <li><a href="/#acerca">Nosotros</a></li>
-            
-            <li className="dropdown" style={{ position: 'relative', overflow: 'visible' }}>
-              <Link to="#" onClick={(e) => e.preventDefault()}>
-                Productos <i className="fas fa-chevron-down"></i>
-              </Link>
-              <ul className="dropdownContent" style={{ display: 'none', position: 'absolute', zIndex: 99999 }}>
-                <li><Link to="/adminHome"><i className="fas fa-th-list"></i> Ver Catálogo</Link></li>
-                <li><Link to="/admin/all"><i className="fas fa-boxes"></i> Inventario </Link></li>
-                <li><Link to="/addProduct"><i className="fas fa-plus-circle"></i> Añadir Producto</Link></li>
-                {/* NOTA: También cambiamos este enlace para que coincida con tu ruta real de actualización */}
-                <li><Link to="/updateProduct"><i className="fas fa-edit"></i> Modificar Producto</Link></li>
-              </ul>
-            </li>
+        } catch (err) {
+            console.error('Error al actualizar Wishlist:', err);
+            setAlertError("Error al actualizar favoritos.");
+        }
+    };
 
-            <li className="dropdown" style={{ position: 'relative', overflow: 'visible' }}>
-              <Link to="#" onClick={(e) => e.preventDefault()}>
-                Categorías <i className="fas fa-chevron-down"></i>
-              </Link>
-              <ul className="dropdownContent" style={{ display: 'none', position: 'absolute', zIndex: 99999 }}>
-                <li><Link to="/addCategory"><i className="fas fa-folder-plus"></i> Crear Categoría</Link></li>
-                <li><Link to="/modifyCategory"><i className="fas fa-folder-minus"></i> Modificar Categoría</Link></li>
-              </ul>
-            </li>
+    // --- ⭐ ENVÍO DE CALIFICACIÓN ---
+    const handleEnviarCalificacion = async (e) => {
+        e.preventDefault();
+        setAlertSuccess('');
+        setAlertError('');
 
-            <li><a href="/#contacto">Contacto</a></li>
-            <li><Link to="/"><i className="fas fa-sign-out-alt"></i> Volver a Inicio</Link></li>
-          </ul>
-        </nav>
-      </header>
+        const payload = {
+            productBarcode: barcodeQuery,
+            score: parseInt(score, 10),
+            comment: comment,
+            client: session?.usuarioLogueado 
+        };
 
-      {/* ================= CONTENEDOR PRINCIPAL (Z-INDEX BAJO) ================= */}
-      <main className="contenedorFormularioCustom" style={{ position: 'relative', zIndex: 1 }}>
-        <div className="contenedorAcerca">
-          <h2>Control de Inventario General</h2>
-          <p>Visualiza, filtra y gestiona todo el catálogo de productos de la tienda.</p>
-        </div>
+        try {
+            const response = await fetch('/api/ratings/rate', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            });
 
-        {/* SECCIÓN DE FILTRADO */}
-        <div className="panelFiltros">
-          <div className="filtroBusqueda">
-            <label htmlFor="search-input">Buscar por Nombre o Marca:</label>
-            <input
-              type="text"
-              id="search-input"
-              placeholder="Ej: Corrector, Atenea..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-          </div>
+            const data = await response.json();
 
-          <div className="filtroCategory">
-            <label htmlFor="filter-category">Categoría:</label>
-            <select
-              id="filter-category"
-              value={selectedCategory}
-              onChange={(e) => setSelectedCategory(e.target.value)}
-            >
-              <option value="TODAS">-- Todas las Categorías --</option>
-              {categories.map((cat) => (
-                <option key={cat.id || cat.name} value={cat.name}>
-                  {cat.name}
-                </option>
-              ))}
-            </select>
-          </div>
+            if (response.ok) { 
+                setAlertSuccess(data.message);
+                setComment('');
+                if (data.nuevoPromedio !== undefined && data.nuevoPromedio !== null) {
+                    setPromedioRating(data.nuevoPromedio);
+                }
+                if (data.nuevoTotal !== undefined && data.nuevoTotal !== null) {
+                    setTotalRatings(data.nuevoTotal);
+                }
+            } else {
+                setAlertError(data.message || 'Ocurrió un inconveniente al procesar tu calificación.');
+            }
+        } catch (err) {
+            console.error('Error al procesar la calificación:', err);
+            setAlertError('Hubo un problema de conexión al enviar tu calificación.');
+        }
+    };
 
-          <div className="filtroEstado">
-            <label htmlFor="filter-status">Estado:</label>
-            <select
-              id="filter-status"
-              value={selectedStatus}
-              onChange={(e) => setSelectedStatus(e.target.value)}
-            >
-              <option value="TODOS">Todos</option>
-              <option value="ACTIVO">Activos</option>
-              <option value="INACTIVO">Inactivos</option>
-            </select>
-          </div>
-        </div>
+    const renderEstrellas = (rating) => {
+        const ratingRedondeado = Math.round(rating);
+        return (
+            <div className="contenedor-estrellas">
+                {[1, 2, 3, 4, 5].map((i) => (
+                    <i key={i} className={i <= ratingRedondeado ? 'fas fa-star' : 'far fa-star'}></i>
+                ))}
+            </div>
+        );
+    };
 
-        {/* SECCIÓN DE LISTADO GENERAL */}
-        <div className="listaProductosHorizontal">
-          {loading && <p className="estadoVacio">Sincronizando inventario...</p>}
+    if (loading) {
+        return (
+            <div className="loadingSpinner" style={{ textAlign: 'center', padding: '5rem', color: '#666' }}>
+                <p>Cargando detalles del producto cosmético...</p>
+            </div>
+        );
+    }
 
-          {error && !loading && (
-            <p className="estadoVacio errorColor">
-              ✖ Error de conexión con el inventario de la base de datos.
-            </p>
-          )}
+    if (!product) {
+        return (
+            <div style={{ textAlign: 'center', padding: '5rem' }}>
+                <h3>Producto no encontrado</h3>
+                <Link to="/" className="btn-volver">Regresar al inicio</Link>
+            </div>
+        );
+    }
 
-          {!loading && !error && filteredProducts.length === 0 && (
-            <p className="estadoVacio">
-              No se encontraron productos que coincidan con los filtros aplicados.
-            </p>
-          )}
+    return (
+        <div className="bodyWrapper">
+            <header className="mainHeader">
+                <h1 className="marca">
+                    <img src={logo} alt="GlowGlam Logo" className="logo" />
+                </h1>
+                <nav className="mainNav">
+                    <ul>
+                        <li><Link to="/#productos">Productos</Link></li>
+                        {session?.usuarioLogueado ? (
+                            <>
+                                <li className="userGreeting" style={{ display: 'flex', alignItems: 'center', fontWeight: 'bold', color: '#333' }}>
+                                    <i className="fas fa-smile" style={{ marginRight: '5px', color: '#AF1740' }}></i>
+                                    ¡Hola, <span>{session.usuarioLogueado.name}</span>!
+                                </li>
+                                <li>
+                                    {/* CORRECCIÓN: Ahora el enlace llama a la función handleLogout en el onClick */}
+                                    <Link 
+                                        to="#" 
+                                        onClick={handleLogout} 
+                                        style={{ color: '#AF1740', fontWeight: 'bold' }}
+                                    >
+                                        <i className="fas fa-sign-out-alt"></i> Salir
+                                    </Link>
+                                </li>
+                            </>
+                        ) : (
+                            <li>
+                                <Link to="/Login"><i className="fas fa-user"></i> Iniciar sesión</Link>
+                            </li>
+                        )}
+                    </ul>
+                </nav>
+            </header>
 
-          {!loading && !error && filteredProducts.map((p) => {
-            if (!p) return null;
-            const urlImagen = p.images && p.images.length > 0 ? p.images[0].imageUrl : 'https://via.placeholder.com/60?text=Glam';
-            
-            return (
-              <div
-                key={p.idBarcode}
-                className={`productoFila ${!p.active ? 'inactivo' : ''}`}
-              >
-                <div className="infoColumna">
-                  <img
-                    src={urlImagen}
-                    alt={p.name || 'Producto'}
-                    onError={(e) => { 
-                      e.currentTarget.onerror = null; 
-                      e.currentTarget.src = 'https://via.placeholder.com/60?text=Glam'; 
-                    }}
-                    className="imagenProducto"
-                  />
+            <div className="main-wrapper">
+                <div className="detalle-container">
+                    
+                    {/* Bloque Izquierdo: Galería */}
+                    <div className="bloque-imagen">
+                        <div className="visor-principal">
+                            <button type="button" className="btn-nav-img prev" onClick={() => navegarImagen(-1)} aria-label="Anterior">
+                                <i className="fas fa-chevron-left"></i>
+                            </button>
+                            <img 
+                                id="imagenPrincipal" 
+                                src={imagenesList[indiceActualImg]} 
+                                alt={product.name}
+                                onError={(e) => { 
+                                    e.currentTarget.onerror = null; 
+                                    e.currentTarget.src = 'https://via.placeholder.com/450?text=Glam+Product'; 
+                                }}
+                            />
+                            <button type="button" className="btn-nav-img next" onClick={() => navegarImagen(1)} aria-label="Siguiente">
+                                <i className="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
 
-                  <div className="detallesTextuales">
-                    <h4>{p.name}</h4>
-                    <div className="metaInfoContainer">
-                      <span><strong>Marca:</strong> {p.brand}</span>
-                      <span>
-                        <strong>Código:</strong> <code>{p.idBarcode}</code>
-                      </span>
-                      <span>
-                        <strong>Categoría:</strong> {p.categoryName || (p.category ? p.category.name : 'Sin categoría')}
-                      </span>
+                        {imagenesList.length > 1 && (
+                            <div className="galeria-miniaturas">
+                                {imagenesList.map((imgUrl, index) => (
+                                    <div 
+                                        key={index} 
+                                        className={`miniatura-item ${index === indiceActualImg ? 'activa' : ''}`}
+                                        style={{ border: `2px solid ${index === indiceActualImg ? '#AF1740' : '#ddd'}` }}
+                                        onClick={() => setIndiceActualImg(index)}
+                                    >
+                                        <img 
+                                            src={imgUrl} 
+                                            alt={`Miniatura ${index}`} 
+                                            onError={(e) => { 
+                                                e.currentTarget.onerror = null; 
+                                                e.currentTarget.src = 'https://via.placeholder.com/70?text=Glam'; 
+                                            }}
+                                        />
+                                    </div>
+                                ))}
+                            </div>
+                        )}
                     </div>
-                  </div>
+
+                    {/* Bloque Derecho: Info */}
+                    <div className="bloque-info">
+                        <span className="marca-tag">{product.brand}</span>
+                        <h2 className="producto-titulo">{product.name}</h2>
+                        
+                        <div className="rating-resumen">
+                            {renderEstrellas(promedioRating)}
+                            <span className="rating-valor" id="uiPromedio">{Number(promedioRating).toFixed(1)}</span>
+                            <span className="rating-contador" id="uiTotal">({totalRatings} calificaciones)</span>
+                        </div>
+
+                        <div className="producto-precio-detalle">
+                            {Number(product.price).toLocaleString('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0 })}
+                        </div>
+                        
+                        <p className="producto-descripcion">
+                            {product.description || "¡Descubre el secreto para resaltar tu belleza única! Este producto de alta gama ha sido seleccionado minuciosamente para ofrecerte la mejor pigmentación, durabilidad y acabado profesional en tu rutina diaria."}
+                        </p>
+
+                        {/* Botón sincronizado */}
+                        <button 
+                            type="button" 
+                            id="btnWishlist" 
+                            className={`btn-wishlist ${isInWishlist ? 'active-wishlist' : ''}`} 
+                            onClick={handleInteractuarWishlist}
+                        >
+                            <i className={isInWishlist ? 'fas fa-heart' : 'far fa-heart'}></i>
+                            <span id="textWishlist">
+                                {isInWishlist ? 'Eliminar de wishlist' : 'Añadir a lista de deseos'}
+                            </span>
+                        </button>
+
+                        <div className="seccion-calificar">
+                            {alertSuccess && <div className="alert-box alert-success" style={{ display: 'block' }}>{alertSuccess}</div>}
+                            {alertError && <div className="alert-box alert-error" style={{ display: 'block' }}>{alertError}</div>}
+
+                            {!session?.usuarioLogueado ? (
+                                <div style={{ color: '#666', fontSize: '0.9rem' }}>
+                                    <i className="fas fa-lock" style={{ marginRight: '5px' }}></i> 
+                                    Debes iniciar sesión para calificar este producto. 
+                                    <Link to="/Login" style={{ color: '#AF1740', fontWeight: 'bold', textDecoration: 'none', marginLeft: '4px' }}>Iniciar Sesión</Link>
+                                </div>
+                            ) : (
+                                <form onSubmit={handleEnviarCalificacion}>
+                                    <h4>Califica tu experiencia:</h4>
+                                    <select 
+                                        id="selectScore" 
+                                        className="select-score" 
+                                        value={score} 
+                                        onChange={(e) => setScore(e.target.value)}
+                                    >
+                                        <option value="5">⭐⭐⭐⭐⭐ (5 - Excelente)</option>
+                                        <option value="4">⭐⭐⭐⭐ (4 - Bueno)</option>
+                                        <option value="3">⭐⭐⭐ (3 - Regular)</option>
+                                        <option value="2">⭐⭐ (2 - Malo)</option>
+                                        <option value="1">⭐ (1 - Pésimo)</option>
+                                    </select>
+                                    <textarea 
+                                        id="txtComment" 
+                                        className="txt-comment" 
+                                        rows="3" 
+                                        placeholder="Deja un comentario sobre tu producto..."
+                                        value={comment}
+                                        onChange={(e) => setComment(e.target.value)}
+                                    ></textarea>
+                                    <button type="submit" className="btn-submit-rating">Enviar Calificación</button>
+                                </form>
+                            )}
+                        </div>
+                    </div>
+
                 </div>
+            </div>
 
-                <div className="accionesColumna">
-                  <span className="precioTexto">
-                    ${Number(p.price || 0).toLocaleString('es-CO', { minimumFractionDigits: 0 })} COP
-                  </span>
-
-                  <span className={`badgeEstado ${p.active ? 'badgeActivo' : 'badgeInactivo'}`}>
-                    {p.active ? 'Activo' : 'Inactivo'}
-                  </span>
-
-                  {/* CORRECCIÓN: Apuntando a la ruta exacta "/updateProduct" mapeada al componente EditProductForm */}
-                  <Link
-                    to={`/updateProduct?barcode=${encodeURIComponent(p.idBarcode || '')}`}
-                    className="btnModificarFila"
-                  >
-                    <i className="fas fa-edit"></i> Modificar
-                  </Link>
-                </div>
-              </div>
-            );
-          })}
+            <footer>
+                <p>&copy; 2026 Glow & Glam. Todos los derechos reservados.</p>
+            </footer>
         </div>
-      </main>
-
-      {/* ================= FOOTER ================= */}
-      <footer className="mainFooter" style={{ position: 'relative', zIndex: 1 }}>
-        <p>&copy; 2026 GlowGlam S.A. Todos los derechos reservados.</p>
-      </footer>
-    </div>
-  );
+    );
 }
