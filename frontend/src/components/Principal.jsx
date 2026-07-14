@@ -7,29 +7,18 @@ import logo from './img/logo.png';
 import "./css/Principalmodule.css";
 
 export default function Principal({ session }) {
-    // --- ESTADOS INTERNOS CONECTADOS A TU BACKEND ---
     const [allCategories, setAllCategories] = useState([]);
     const [activeProducts, setActiveProducts] = useState([]);
     const [loading, setLoading] = useState(true);
-
-    // Estados de interfaz y búsqueda
     const [searchTerm, setSearchTerm] = useState('');
     const [currentSlide, setCurrentSlide] = useState(0);
-
-    // --- NUEVOS ESTADOS Y REFERENCIAS PARA EL BUSCADOR DESPLEGABLE ---
     const [searchActive, setSearchActive] = useState(false);
     const buscadorRef = useRef(null);
-
-    // Estado local para manejar de forma reactiva los favoritos sin recargar la página
     const [wishlistBarcodes, setWishlistBarcodes] = useState([]);
-
-    // Datos para el formulario de contacto
     const [contactForm, setContactForm] = useState({ name: '', email: '', message: '' });
-
-    // Referencia para scroll suave hacia la sección de productos
     const productosSectionRef = useRef(null);
 
-    // --- 📦 INYECCIÓN DINÁMICA DE FONT AWESOME ---
+    // Inyección dinámica de Font Awesome
     useEffect(() => {
         const linkId = 'font-awesome-cdn';
         if (!document.getElementById(linkId)) {
@@ -41,7 +30,7 @@ export default function Principal({ session }) {
         }
     }, []);
 
-    // --- EFECTO PARA CERRAR EL DROPDOWN AL HACER CLIC AFUERA ---
+    // Cerrar dropdown al hacer clic afuera
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (buscadorRef.current && !buscadorRef.current.contains(event.target)) {
@@ -52,53 +41,40 @@ export default function Principal({ session }) {
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, []);
 
-    // --- 🔄 EFECTO SEGURO E INDEPENDIENTE PARA TU BACKEND ---
+    // Carga dinámica de datos según la sesión activa
     useEffect(() => {
         const cargarDatosDeBaseDeDatos = async () => {
             setLoading(true);
 
-            // 1. INTENTAR CARGAR CATEGORÍAS
+            // 1. Cargar categorías
             try {
                 const resCat = await fetch('/api/categories');
                 if (resCat.ok) {
                     const categoriasData = await resCat.json();
-                    console.log("🔍 [DEBUG] Categorías recibidas del backend:", categoriasData);
                     if (Array.isArray(categoriasData)) {
                         const categoriasActivas = categoriasData.filter(c => c.active === true || c.active === undefined);
                         setAllCategories(categoriasActivas);
                     }
-                } else {
-                    console.error("❌ El backend respondió con error en /api/categories. Código:", resCat.status);
                 }
             } catch (error) {
-                console.error("❌ Error de red o conexión al buscar categorías (/api/categories):", error);
+                console.error("❌ Error al buscar categorías:", error);
             }
 
-            // 2. INTENTAR CARGAR PRODUCTOS
+            // 2. Cargar productos
             try {
                 const resProd = await fetch('/api/products');
                 if (resProd.ok) {
                     const productosData = await resProd.json();
-
-                    // ALERTA DE DIAGNÓSTICO: Ver qué está llegando exactamente del Servidor
-                    console.log("🔍 [DEBUG] Productos recibidas del backend:", productosData);
-
                     if (Array.isArray(productosData)) {
-                        // Ojo con el filtro de p.active. Asegúrate de que en tu Base de datos no estén como falsos.
                         const activos = productosData.filter(p => p.active === true || p.active === undefined);
-                        console.log("🔍 [DEBUG] Productos activos tras filtrar:", activos);
                         setActiveProducts(activos);
-                    } else {
-                        console.warn("⚠️ El backend no devolvió un Arreglo (Array) en /api/products.");
                     }
-                } else {
-                    console.error("❌ El backend respondió con error en /api/products. Código:", resProd.status);
                 }
             } catch (error) {
-                console.error("❌ Error de red o conexión al buscar productos (/api/products):", error);
+                console.error("❌ Error al buscar productos:", error);
             }
 
-            // 3. INTENTAR CARGAR EL ESTADO INICIAL DE LA WISHLIST (¡CORREGIDO Y SEGURO!)
+            // 3. Cargar wishlist de forma reactiva si el usuario ya está logueado
             if (session?.usuarioLogueado) {
                 try {
                     const resWish = await fetch('/api/wishlist', {
@@ -109,9 +85,7 @@ export default function Principal({ session }) {
 
                     if (resWish.ok) {
                         const wishlistData = await resWish.json();
-
                         if (Array.isArray(wishlistData)) {
-                            // Mapea los barcodes admitiendo tanto estructuras planas como anidadas (ej. item.product.idBarcode)
                             const barcodesValidos = wishlistData
                                 .filter(item => item && (item.product?.idBarcode || item.idBarcode))
                                 .map(item => item.product ? item.product.idBarcode : item.idBarcode);
@@ -119,22 +93,23 @@ export default function Principal({ session }) {
                             setWishlistBarcodes(barcodesValidos);
                         }
                     } else {
-                        console.error("❌ El backend respondió con error en /api/wishlist. Código:", resWish.status);
                         setWishlistBarcodes([]);
                     }
                 } catch (error) {
-                    console.error("❌ Error al procesar o parsear el flujo de la wishlist:", error);
+                    console.error("❌ Error al procesar la wishlist:", error);
                     setWishlistBarcodes([]);
                 }
+            } else {
+                setWishlistBarcodes([]); // Limpiar wishlist si no hay sesión
             }
 
             setLoading(false);
         };
 
         cargarDatosDeBaseDeDatos();
-    }, [session]);
+    }, [session]); // Escucha activamente el prop 'session'
 
-    // --- 🎠 MOTOR DEL BANNER ROTATIVO (CAROUSEL) ---
+    // Motor del carrusel
     const slides = useMemo(() => [newSeasonImg, newCollectionImg, betterPricesImg], []);
 
     useEffect(() => {
@@ -152,7 +127,6 @@ export default function Principal({ session }) {
         setCurrentSlide((prev) => (prev + 1) % slides.length);
     };
 
-    // --- 🔍 LÓGICA DE FILTRADO EN TIEMPO REAL ---
     const normalizeText = (text) => {
         return text
             ? text.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim()
@@ -171,7 +145,6 @@ export default function Principal({ session }) {
         });
     }, [searchTerm, activeProducts]);
 
-    // --- LÓGICA EXCLUSIVA PARA EL DESPLEGABLE (Evita cargar todos si no hay búsqueda) ---
     const dropdownProducts = useMemo(() => {
         const term = normalizeText(searchTerm);
         if (!term) return [];
@@ -190,7 +163,6 @@ export default function Principal({ session }) {
         }
     };
 
-    // --- 🛒 LÓGICA DE WISHLIST DINÁMICA ---
     const handleInteractuarWishlist = async (barcode) => {
         if (!session?.usuarioLogueado) {
             window.location.href = '/Login';
@@ -223,7 +195,6 @@ export default function Principal({ session }) {
         }
     };
 
-    // --- MANEJADORES DE EVENTOS ---
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setContactForm((prev) => ({ ...prev, [name]: value }));
@@ -240,8 +211,6 @@ export default function Principal({ session }) {
             if (res.ok) {
                 localStorage.removeItem('usuarioLogueado');
                 window.location.href = '/';
-            } else {
-                console.error("Error al cerrar sesión en el servidor");
             }
         } catch (error) {
             console.error("Error de red al intentar hacer logout:", error);
@@ -265,7 +234,6 @@ export default function Principal({ session }) {
 
     return (
         <div className="bodyWrapper">
-            {/* ================= HEADER & NAV ================= */}
             <header className="mainHeader">
                 <h1 className="marca">
                     <img src={logo} alt="GlowGlam Logo" className="logo" />
@@ -276,7 +244,6 @@ export default function Principal({ session }) {
                         <li><a href="#productos" className="activeLink">Products</a></li>
                         <li><a href="#contacto">Contacto</a></li>
 
-                        {/* Buscador Integrado con Dropdown Flotante */}
                         <li style={{ position: 'relative' }} ref={buscadorRef}>
                             <div className="contenedorBuscadorHeader">
                                 <input
@@ -292,7 +259,6 @@ export default function Principal({ session }) {
                                 <i className="fas fa-search"></i>
                             </div>
 
-                            {/* DROPDOWN DE RESULTADOS FLOTANTE */}
                             {searchActive && searchTerm.trim() !== '' && (
                                 <div className="buscadorDropdown">
                                     {dropdownProducts.length > 0 ? (
@@ -329,7 +295,6 @@ export default function Principal({ session }) {
                             )}
                         </li>
 
-                        {/* Control de Sesión Dinámico */}
                         {!session?.usuarioLogueado ? (
                             <>
                                 <li>
@@ -363,7 +328,6 @@ export default function Principal({ session }) {
                 </nav>
             </header>
 
-            {/* ================= CAROUSEL / BANNER ROTATIVO ================= */}
             <section id="inicio" className="carouselSection">
                 <div className="imagenContainer">
                     {slides.map((src, index) => (
@@ -385,7 +349,6 @@ export default function Principal({ session }) {
                 </div>
             </section>
 
-            {/* Pantalla de carga */}
             {loading && (
                 <div className="loadingSpinner" style={{ textAlign: 'center', padding: '3rem' }}>
                     <p>Cargando catálogo de Glow & Glam...</p>
@@ -394,7 +357,6 @@ export default function Principal({ session }) {
 
             {!loading && (
                 <>
-                    {/* ================= CATEGORÍAS CIRCULARES BURBUJA ================= */}
                     <section className="seccionCategorias" style={{ backgroundColor: '#fcfaf7', padding: '40px 20px', textAlign: 'center' }}>
                         <div className="categoriasScroll">
                             {allCategories.map((cat) => {
@@ -423,14 +385,12 @@ export default function Principal({ session }) {
                         </div>
                     </section>
 
-                    {/* ================= GRILLA DE PRODUCTOS INTEGRADA ================= */}
                     <section id="productos" ref={productosSectionRef} className="contenedorProductosGrid">
                         <div className="cabeceraSeccion">
                             <h2>¡Productos pensados para ti!</h2>
                             <p>Descubre nuestra selección exclusiva de belleza y cuidado.</p>
                         </div>
 
-                        {/* Banner sin Resultados de Búsqueda */}
                         {filteredProducts.length === 0 && activeProducts.length > 0 && (
                             <div className="sinResultados" style={{ textAlign: 'center', padding: '30px', color: '#666', fontStyle: 'italic', width: '100%' }}>
                                 <i className="fas fa-search-minus" style={{ fontSize: '2rem', color: '#AF1740', marginBottom: '10px', display: 'block' }}></i>
@@ -461,7 +421,6 @@ export default function Principal({ session }) {
                                                 {Number(p.price).toLocaleString('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0 })}
                                             </p>
 
-                                            {/* Sección del Rating en la Grilla */}
                                             <div className="producto-rating" style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.9rem', marginBottom: '12px' }}>
                                                 {renderStars(p.averageRating)}
                                                 <span style={{ color: '#333', fontWeight: 'bold', marginLeft: '2px' }}>
@@ -472,7 +431,6 @@ export default function Principal({ session }) {
                                                 </span>
                                             </div>
 
-                                            {/* Acciones del Footer */}
                                             <div className="producto-acciones-footer" style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '10px', width: '100%' }}>
                                                 <Link to={`/producto/detalle?barcode=${p.idBarcode}`} className="botonComprar" style={{ flexGrow: 1, margin: 0, textAlign: 'center' }}>
                                                     Ver Detalles
@@ -492,7 +450,6 @@ export default function Principal({ session }) {
                                 );
                             })}
 
-                            {/* Fallback de error o base de datos vacía */}
                             {activeProducts.length === 0 && (
                                 <div className="productoCard" style={{ border: '1px dashed #ccc', opacity: 0.7 }}>
                                     <div className="productoImgContainer">
@@ -520,7 +477,6 @@ export default function Principal({ session }) {
                 </>
             )}
 
-            {/* ================= SECCIÓN ACERCA DE ================= */}
             <section id="acerca" className="seccionAcerca">
                 <div className="contenedorAcerca">
                     <h2>¡Conócenos!</h2>
@@ -531,7 +487,6 @@ export default function Principal({ session }) {
                 </div>
             </section>
 
-            {/* ================= FORMULARIO DE CONTACTO ================= */}
             <section id="contacto" className="contenedorFormularioBase">
                 <div className="cabeceraContacto">
                     <h2>¿Tienes alguna pregunta?</h2>
@@ -575,7 +530,6 @@ export default function Principal({ session }) {
                 </form>
             </section>
 
-            {/* ================= FOOTER ================= */}
             <footer className="mainFooter">
                 <p>&copy; 2026 Glow & Glam. Todos los derechos reservados.</p>
             </footer>
