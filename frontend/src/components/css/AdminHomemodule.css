@@ -5,168 +5,85 @@
     margin: 0;
     padding: 0;
 }
-
-/* ================= HEADER ================= */
-/* ================= HEADER CORREGIDO ================= */
-.header {
+/* ================= HEADER Y NAVEGACIÓN (estándar, igual a Modificar) ================= */
+.mainHeader {
     display: flex;
     align-items: center;
     justify-content: space-between;
     border-top: 30px solid #740938;
     background-color: rgb(246, 243, 243);
-    font-size: 13px;
-    padding: 15px 40px;
-    position: sticky;
-    top: 0;
-    z-index: 999;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    font-size: 12px;
+    padding: 10px 20px;
 }
-
 .marca {
-    margin: 0;
     display: flex;
     align-items: center;
+    gap: 10px;
+    margin: 0;
+    font-size: 1.5rem;
+    color: rgb(34, 33, 33);
 }
-
 .logo {
-    height: 45px;
+    height: 50px;
     width: auto;
 }
-
-.menuList {
+.mainNav ul {
     list-style: none;
     display: flex;
     align-items: center;
-    gap: 30px;
+    gap: 15px;
     margin: 0;
     padding: 0;
 }
-
-.menuItem {
-    position: relative;
+.mainNav ul li a {
+    text-decoration: none;
+    color: black;
+    padding: 10px 15px;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
 }
-
-.menuLink {
-    text-decoration: none !important;
-    color: #000000 !important;
-    font-weight: 700;
-    padding: 8px 0;
-    display: flex;
-    align-items: center;
-    transition: color 0.2s ease;
+.mainNav ul li a:hover {
+    color: #AF1740;
 }
-
-.menuLink:hover {
-    color: #AF1740 !important;
-}
-
-/* ================= DROPDOWNS ================= */
+/* Dropdown: el display lo controla React (inline). Aquí solo apariencia. */
 .dropdown {
     position: relative;
+    display: inline-block;
 }
-
-.dropdown-content {
-    display: none;
+.dropdown > a i {
+    margin-left: 5px;
+    font-size: 0.8rem;
+}
+.dropdown-content,
+.dropdownContent {
     position: absolute;
-    background-color: #ffffff;
-    min-width: 180px;
-    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
-    border-radius: 6px;
     top: 100%;
     left: 0;
-    padding: 8px 0;
-    margin-top: 5px;
-    border: 1px solid rgba(0,0,0,0.05);
-    list-style: none;
-    flex-direction: column !important;
-    align-items: flex-start !important;
-}
-
-.dropdownItem {
-    width: 100%;
-    display: block !important;
-}
-
-.dropdownLink {
-    color: #333333 !important;
-    text-decoration: none !important;
-    padding: 10px 16px !important;
-    display: flex !important;
-    align-items: center;
-    font-size: 13px;
-    font-weight: 600 !important;
-    width: 100%;
-    box-sizing: border-box;
-}
-
-.dropdownLink i {
-    margin-right: 10px;
-    width: 16px;
-    text-align: center;
-    color: #555;
-}
-
-.dropdownLink:hover {
-    background-color: #f8f9fa;
-    color: #AF1740 !important;
-}
-
-.dropdown:hover .dropdown-content {
-    display: flex !important;
-}
-
-/* ================= DROPDOWNS (CORREGIDOS EN VERTICAL) ================= */
-.dropdown-content {
-    display: none;
-    position: absolute;
+    min-width: 200px;
     background-color: #ffffff;
-    min-width: 180px;
-    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
-    border-radius: 6px;
-    top: 100%;
-    left: 0;
-    padding: 8px 0;
-    margin-top: 5px;
-    border: 1px solid rgba(0,0,0,0.05);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    border: 1px solid #eee;
+    padding: 5px 0;
+    margin: 0;
     list-style: none;
-    
-    /* Anula herencias flex horizontales del menú padre */
-    flex-direction: column !important;
-    align-items: flex-start !important;
+    z-index: 99999;
 }
-
-.dropdown-content li {
-    width: 100%;
-    display: block !important;
-}
-
-.dropdown-content li a {
+.dropdown-content li a,
+.dropdownContent li a {
     color: #333333 !important;
-    padding: 10px 16px !important;
-    display: flex !important;
-    align-items: center;
-    font-size: 13px;
-    font-weight: 600 !important;
-    width: 100%;
-    box-sizing: border-box;
+    padding: 10px 15px;
+    text-decoration: none;
+    display: block;
+    font-size: 0.9rem;
+    font-weight: bold;
 }
-
-.dropdown-content li a i {
-    margin-right: 10px;
-    width: 16px;
-    text-align: center;
-    color: #555;
-}
-
-.dropdown-content li a:hover {
-    background-color: #f8f9fa;
+.dropdown-content li a:hover,
+.dropdownContent li a:hover {
+    background-color: #f5f5f5;
     color: #AF1740 !important;
 }
-
-.dropdown:hover .dropdown-content {
-    display: flex !important;
-}
-
 /* ================= INICIO / CARRUSEL ================= */
 .imagen-container {
     position: relative;
@@ -174,7 +91,6 @@
     max-height: 450px;
     overflow: hidden;
 }
-
 #imagen-temporada {
     width: 100%;
     height: auto;
@@ -182,7 +98,6 @@
     object-fit: cover;
     display: block;
 }
-
 .btn-move {
     position: absolute;
     top: 50%;
@@ -196,14 +111,11 @@
     border-radius: 50%;
     transition: background-color 0.2s;
 }
-
 .btn-move:hover {
     background-color: rgba(0, 0, 0, 0.7);
 }
-
 #btn-prev { left: 20px; }
 #btn-next { right: 20px; }
-
 /* ================= SECCIÓN PRODUCTOS ================= */
 .seccionProductosContenedor {
     max-width: 1200px;
@@ -211,19 +123,16 @@
     padding: 0 20px;
     text-align: center;
 }
-
 .seccionProductosContenedor h2 {
     font-size: 2rem;
     color: #333;
     margin-bottom: 30px;
 }
-
 .productos-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
     gap: 30px;
 }
-
 .producto {
     background: white;
     padding: 20px;
@@ -235,35 +144,29 @@
     justify-content: space-between;
     transition: transform 0.2s;
 }
-
 .producto:hover {
     transform: translateY(-5px);
 }
-
 .producto img {
     width: 100%;
     height: 200px;
     object-fit: cover;
     border-radius: 4px;
 }
-
 .producto h3 {
     font-size: 1.1rem;
     color: #333;
     margin: 15px 0 5px 0;
 }
-
 .producto p {
     font-weight: bold;
     color: #AF1740;
     font-size: 1.1rem;
     margin: 10px 0;
 }
-
 .inactivo {
     opacity: 0.6;
 }
-
 .badge-estado {
     padding: 4px 10px;
     border-radius: 20px;
@@ -272,12 +175,10 @@
     font-weight: bold;
     margin-top: 5px;
 }
-
 .badge-inactivo {
     background-color: #fce8e6;
     color: #c5221f;
 }
-
 .boton-comprar {
     display: inline-block;
     width: 100%;
@@ -291,11 +192,9 @@
     text-align: center;
     transition: background 0.2s;
 }
-
 .boton-comprar:hover {
     background: #555;
 }
-
 /* ================= ACERCA DE ================= */
 .contenedor-acerca {
     background-color: #f1eded;
@@ -303,7 +202,6 @@
     text-align: center;
     margin: 40px 0 0 0;
 }
-
 /* ================= CONTACTO ================= */
 .contenedor-formulario {
     max-width: 600px;
@@ -313,18 +211,15 @@
     border-radius: 8px;
     box-shadow: 0 4px 15px rgba(0,0,0,0.05);
 }
-
 .contenedor-formulario form {
     display: flex;
     flex-direction: column;
 }
-
 .contenedor-formulario label {
     font-weight: bold;
     margin-bottom: 8px;
     color: #333;
 }
-
 .contenedor-formulario input,
 .contenedor-formulario textarea {
     padding: 10px;
@@ -334,7 +229,6 @@
     width: 100%;
     box-sizing: border-box;
 }
-
 .contenedor-formulario button {
     padding: 12px;
     background-color: #333;
@@ -346,11 +240,9 @@
     cursor: pointer;
     transition: background 0.2s;
 }
-
 .contenedor-formulario button:hover {
     background-color: #555;
 }
-
 /* ================= ESTADO VACÍO ================= */
 .estado-vacio {
     text-align: center;
@@ -359,52 +251,7 @@
     background: white;
     border-radius: 8px;
 }
-
 /* ================= FOOTER ================= */
 .footer {
     background-color: #f5f4f4;
-    padding: 20px;
-    text-align: center;
-}
-
-/* ================= BOTÓN ARRIBA ================= */
-#btn-arriba {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    background-color: #333;
-    color: white;
-    border: none;
-    border-radius: 50%;
-    width: 45px;
-    height: 45px;
-    font-size: 1.2rem;
-    cursor: pointer;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-}
-
-/* 1. El contenedor padre debe tener posición relativa */
-.dropdown {
-  position: relative;
-  display: inline-block; /* O el comportamiento de flujo que ya tenga en tu flexbox */
-}
-
-/* 2. El menú oculto por defecto, con posicionamiento absoluto */
-.dropdown-content, .dropdownContent {
-  display: none;
-  position: absolute;
-  top: 100%; /* Se despliega justo abajo del texto padre */
-  left: 0;
-  z-index: 99999; /* Se superpone a los formularios e inventarios */
-  min-width: 200px; /* Ancho mínimo para que no se corte el texto */
-}
-
-/* 🔥 LA MAGIA DEL HOVER: Cuando el mouse entra a .dropdown, se muestra el hijo */
-.dropdown:hover .dropdown-content,
-.dropdown:hover .dropdownContent {
-  display: block !important;
-}
+    padding:
