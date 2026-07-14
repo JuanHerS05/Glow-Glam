@@ -41,8 +41,13 @@ export default function Login() {
         const userData = await response.json();
         localStorage.setItem('usuarioLogueado', JSON.stringify(userData));
 
-        // Redirige según el rol devuelto por el backend
-        if (userData.role === 'ADMIN' || userData.tipo === 'ADMIN') {
+        // Validación robusta para verificar si el rol es ADMIN en cualquier formato estructurado por el backend
+        const esAdmin = 
+          userData.role === 'ADMIN' || 
+          userData.tipo === 'ADMIN' || 
+          (userData.role && userData.role.role === 'ADMIN');
+
+        if (esAdmin) {
           navigate('/adminHome');
         } else {
           navigate('/');
