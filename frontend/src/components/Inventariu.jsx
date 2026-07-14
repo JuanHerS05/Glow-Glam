@@ -89,7 +89,6 @@ export default function Inventario() {
         </h1>
         <nav className="mainNav" style={{ overflow: 'visible' }}>
           <ul style={{ overflow: 'visible' }}>
-            <li><a href="/#acerca">Nosotros</a></li>
             
             <li className="dropdown" style={{ position: 'relative', overflow: 'visible' }}>
               <Link to="#" onClick={(e) => e.preventDefault()}>
