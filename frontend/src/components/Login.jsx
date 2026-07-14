@@ -48,7 +48,7 @@ export default function Login() {
           (userData.role && userData.role.role === 'ADMIN');
 
         if (esAdmin) {
-navigate('/adminHome');
+window.location.href = '/adminHome';
 } else {
   window.location.href = '/'; // Fuerza la recarga a la página de inicio para que lea la sesión al instante
 }
