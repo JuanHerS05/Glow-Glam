@@ -123,7 +123,6 @@ export default function ModifyCategory() {
               </ul>
             </li>
 
-            <li><a href="/#contacto">Contacto</a></li>
             <li><Link to="/"><i className="fas fa-sign-out-alt"></i> Volver a Inicio</Link></li>
           </ul>
         </nav>
