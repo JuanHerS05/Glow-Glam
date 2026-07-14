@@ -74,7 +74,6 @@ export default function ModifyProduct() {
         </h1>
         <nav className="mainNav" style={{ overflow: 'visible' }}>
           <ul style={{ overflow: 'visible' }}>
-            <li><a href="#acerca">Nosotros</a></li>
             
             <li className="menuItem dropdown" style={{ position: 'relative', overflow: 'visible' }}>
               <Link to="#" onClick={(e) => e.preventDefault()}>
