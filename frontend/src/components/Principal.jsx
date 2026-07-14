@@ -241,7 +241,7 @@ export default function Principal({ session }) {
                 <nav className="mainNav">
                     <ul>
                         <li><a href="#acerca">Nosotros</a></li>
-                        <li><a href="#productos" className="activeLink">Products</a></li>
+                        <li><a href="#productos" className="activeLink">Productos</a></li>
                         <li><a href="#contacto">Contacto</a></li>
 
                         <li style={{ position: 'relative' }} ref={buscadorRef}>
