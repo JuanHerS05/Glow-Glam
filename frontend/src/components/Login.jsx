@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom'; 
-import './css/Loginmodule.css'; 
+import { Link, useNavigate } from 'react-router-dom';
+import './css/Loginmodule.css';
 import logo from './img/logo.png';
 
 export default function Login() {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false); 
+  const [showPassword, setShowPassword] = useState(false);
   const [hasError, setHasError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [isRegistered, setIsRegistered] = useState(false);
@@ -30,6 +30,7 @@ export default function Login() {
     try {
       const response = await fetch('/api/auth/login', {
         method: 'POST',
+        credentials: 'include', // <-- imprescindible para que se guarde la cookie de sesión
         headers: {
           'Content-Type': 'application/json'
         },
@@ -37,13 +38,14 @@ export default function Login() {
       });
 
       if (response.ok) {
-        const userData = await response.json(); 
+        const userData = await response.json();
         localStorage.setItem('usuarioLogueado', JSON.stringify(userData));
 
+        // Redirige según el rol devuelto por el backend
         if (userData.role === 'ADMIN' || userData.tipo === 'ADMIN') {
-          window.location.href = '/adminHome';
+          navigate('/adminHome');
         } else {
-          window.location.href = '/';
+          navigate('/');
         }
       } else {
         setHasError(true);
@@ -51,7 +53,7 @@ export default function Login() {
         setErrorMessage(errorText || 'Credenciales incorrectas.');
       }
     } catch (error) {
-      console.error("Error de red al intentar iniciar sesión:", error);
+      console.error('Error de red al intentar iniciar sesión:', error);
       setHasError(true);
       setErrorMessage('No se pudo conectar con el servidor.');
     }
@@ -102,24 +104,22 @@ export default function Login() {
             />
 
             <label htmlFor="password">Contraseña:</label>
-            {/* 🔥 CONTENEDOR LIMPIO: Controla el margen inferior desde el CSS directamente */}
             <div className="password-wrapper">
               <input
-                type={showPassword ? 'text' : 'password'} 
+                type={showPassword ? 'text' : 'password'}
                 id="password"
                 name="userpass"
-                className="input-password" 
+                className="input-password"
                 placeholder="Ingrese su contraseña"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
               />
-              {/* 🔥 BOTÓN DEL OJO: Centrado dinámico perfecto */}
               <button
                 type="button"
                 className="btn-toggle-password"
                 onClick={() => setShowPassword(!showPassword)}
-                aria-label={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
+                aria-label={showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
               >
                 <i className={showPassword ? 'fas fa-eye-slash' : 'fas fa-eye'}></i>
               </button>
