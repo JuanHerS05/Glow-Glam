@@ -43,7 +43,7 @@ export default function Login() {
         localStorage.setItem('usuarioLogueado', JSON.stringify(userData));
 
         if (userData.role === 'ADMIN') {  
-          navigate('/adminHome');
+       window.location.href ='/adminHome';
         } else {
           window.location.href = '/';
         }
