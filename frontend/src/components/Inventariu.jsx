@@ -99,7 +99,8 @@ export default function Inventario() {
                 <li><Link to="/adminHome"><i className="fas fa-th-list"></i> Ver Catálogo</Link></li>
                 <li><Link to="/admin/all"><i className="fas fa-boxes"></i> Inventario </Link></li>
                 <li><Link to="/addProduct"><i className="fas fa-plus-circle"></i> Añadir Producto</Link></li>
-                <li><Link to="/modifyProduct"><i className="fas fa-edit"></i> Modificar Producto</Link></li>
+                {/* NOTA: También cambiamos este enlace para que coincida con tu ruta real de actualización */}
+                <li><Link to="/updateProduct"><i className="fas fa-edit"></i> Modificar Producto</Link></li>
               </ul>
             </li>
 
@@ -228,9 +229,9 @@ export default function Inventario() {
                     {p.active ? 'Activo' : 'Inactivo'}
                   </span>
 
-                  {/* CORRECCIÓN: Ruta de redirección unificada con la barra de navegación (/modifyProduct) */}
+                  {/* CORRECCIÓN: Apuntando a la ruta exacta "/updateProduct" mapeada al componente EditProductForm */}
                   <Link
-                    to={`/modifyProduct?barcode=${encodeURIComponent(p.idBarcode || '')}`}
+                    to={`/updateProduct?barcode=${encodeURIComponent(p.idBarcode || '')}`}
                     className="btnModificarFila"
                   >
                     <i className="fas fa-edit"></i> Modificar
