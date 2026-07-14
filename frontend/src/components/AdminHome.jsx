@@ -39,10 +39,13 @@ export default function AdminHome() {
     // Ya validado como admin, cargamos los productos de la página
     const cargarDatos = async () => {
       try {
-        const dataResponse = await fetch('/api/', { credentials: 'include' });
+        const dataResponse = await fetch('/api/products', { credentials: 'include' });
         if (dataResponse.ok) {
           const data = await dataResponse.json();
-          setProductos(data.activeProducts || []);
+          const activos = Array.isArray(data)
+            ? data.filter((p) => p.active === true || p.active === undefined)
+            : [];
+          setProductos(activos);
         }
       } catch (error) {
         console.error(error);
