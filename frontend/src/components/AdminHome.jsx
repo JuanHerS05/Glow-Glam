@@ -119,9 +119,6 @@ export default function AdminHome() {
         </h1>
         <nav>
           <ul className="menuList">
-            <li className="menuItem">
-              <a href="#acerca" className="menuLink">Nosotros</a>
-            </li>
             <li className="menuItem dropdown">
               <Link className="menuLink" to="#" onClick={(e) => e.preventDefault()}>
                 Productos <i className="fas fa-chevron-down"></i>
@@ -165,9 +162,6 @@ export default function AdminHome() {
                   </Link>
                 </li>
               </ul>
-            </li>
-            <li className="menuItem">
-              <a href="#contacto" className="menuLink">Contacto</a>
             </li>
             <li className="menuItem">
               <a href="#" className="menuLink" onClick={handleLogout}>
