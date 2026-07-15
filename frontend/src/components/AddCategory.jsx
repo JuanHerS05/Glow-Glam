@@ -134,12 +134,7 @@ export default function AddCategory() {
                 </li>
               </ul>
             </li>
-
-            <li className="menuItem">
-              <Link to="#" className="menuLink" onClick={handleLogout}>
-                <i className="fas fa-sign-out-alt"></i> Cerrar sesión
-              </Link>
-            </li>
+<li><Link to="/adminHome"><i className="fas fa-sign-out-alt"></i> Volver a Inicio</Link></li>
           </ul>
         </nav>
       </header>
