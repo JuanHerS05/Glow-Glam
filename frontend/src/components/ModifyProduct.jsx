@@ -105,7 +105,7 @@ export default function ModifyProduct() {
                 <li><Link to="/modifyCategory" onClick={() => setOpenMenu(null)}><i className="fas fa-folder-minus"></i> Modificar Categoría</Link></li>
               </ul>
             </li>
-            <li><a href="#" onClick={handleLogout}><i className="fas fa-sign-out-alt"></i> Cerrar sesión</a></li>
+            <li><Link to="/adminHome"><i className="fas fa-sign-out-alt"></i> Volver a Inicio</Link></li>
           </ul>
         </nav>
       </header>
