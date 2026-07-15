@@ -130,7 +130,7 @@ export default function AdminHome() {
                 <li><Link to="/modifyCategory" onClick={() => setOpenMenu(null)}><i className="fas fa-folder-minus"></i> Modificar Categoría</Link></li>
               </ul>
             </li>
-            <li><Link to="/adminHome"><i className="fas fa-th-list"></i> Volver a Inicio</Link></li>
+            <li><a href="#" onClick={handleLogout}><i className="fas fa-sign-out-alt"></i> Cerrar sesión</a></li>
           </ul>
         </nav>
       </header>
